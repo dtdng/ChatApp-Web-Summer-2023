@@ -1,0 +1,198 @@
+
+button {
+    margin: 2;
+}
+tr {
+    vertical-align: top;
+}
+.button-clicked_camera {
+    background-color: red;
+    color: white;
+}
+.button-clicked_mic {
+    background-color: red;
+    color: white;
+}
+.button-clicked_sharescreen {
+    background-color: red;
+    color: white;
+}
+.button-clicked_camera_share_screen {
+    background-color: red;
+    color: white;
+}
+.button-clicked_mic_share_screen {
+    background-color: red;
+    color: white;
+}
+.button2{
+    background-color: red;
+    color: white;
+}
+.video {
+    width: 200px;
+    background-color: rgb(255, 255, 255);
+    padding: 0;
+    margin: 1px 1px;
+    /* border: 3px solid #fff; */
+    border-radius: 10px;
+}
+.video2 {
+    width: 600px;
+    background-color: rgb(255, 255, 255);
+    padding: 0;
+    margin: 1px 1px;
+    /* border: 3px solid #fff; */
+    border-radius: 10px;
+}
+.mainTable {
+    width: 100%;
+}
+.localColumn {
+    position: absolute;
+    bottom: 0px;
+    width: 600px;
+    height: 160;
+}
+
+.videoContainer_state1 {
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    left:0px;
+    top: 0px;
+    background-color: rgb(26, 25, 25);
+    width: 250px;
+    height: 70%;
+    overflow-y: scroll;
+}
+.videoContainer_state2 {
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    left:0px;
+    top: 0px;
+    background-color: rgb(225, 30, 30);
+    width: 1100px;
+    height: 70%;
+    overflow-y: scroll;
+}
+
+#videoContainer #change_size{
+    position: absolute;
+    top:0px;
+}
+#videoContainer video{
+    width: 200;
+}
+
+.largeScreen{
+    position: absolute;
+    background-color: rgb(157, 255, 0);
+    top:0px;
+    width: 860px;
+    height: 70%;
+    left: 250px;
+}
+/* #localVideo {
+    width: 200px;
+    height: 120px;
+    bottom: 0px;
+} */
+.ShareScreen{
+    position: absolute;
+    background-color: rgb(157, 255, 0);
+    height: 170;
+    top: 0px;
+    left:200px;
+
+}
+
+.ShareScreen #localShareScreen{
+    position: absolute;
+    top: 0px;
+    width: 200;
+    height:120;
+}
+.ShareScreen #btnCamShareScreen{
+    position: absolute;
+    bottom: 10px;
+    left: 0px;
+}
+.ShareScreen #btnMicShareScreen{
+    position: absolute;
+    bottom: 10px;
+    left: 65px;
+}
+.remoteVideo {
+    float: left;
+}
+
+.videoWrap {
+    margin: 3;
+    display: flex;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 1060px) {
+    .video {
+        width: 300px;
+    }
+}
+
+@media only screen and (max-width: 940px) {
+    .video {
+        width: 240px;
+    }
+}
+
+
+/* =============================== */
+/* Button local */
+#controls{
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform:translateX(-50%);
+    display: flex;
+    gap: 1em;
+}
+
+
+.control-container{
+  background-color: rgba(148, 148, 148, 0.9);
+  padding: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.control-container img{
+    height: 30px;
+    width: 30px;
+}
+
+#leave-btn{
+    background-color: rgb(255,80,80, 1);
+}
+
+
+/* =====================+Chat===================== */
+/* .chat{
+    position: absolute;
+    right: 0px;
+    height: 100%;
+    width: 350px;
+    background-color: rgb(229, 206, 29);
+} */
+
+.participantsColumn{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    width: 350px;
+    background-color: rgb(229, 206, 29);
+}
