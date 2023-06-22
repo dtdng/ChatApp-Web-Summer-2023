@@ -20458,9 +20458,10 @@ const io = require('socket.io-client')
 const mediasoupClient = require('mediasoup-client')
 
 const roomName = window.location.pathname.split('/')[2]
+const host_name = window.location.pathname.split('/')[3]
 
 const socket = io("/mediasoup")
-
+module.exports = socket
 socket.on('connection-success', ({ socketId }) => {
   console.log(socketId)
   getLocalStream()
@@ -20532,7 +20533,7 @@ const streamSuccess = (stream) => {
 }
 
 const joinRoom = () => {
-  socket.emit('joinRoom', { roomName }, (data) => {
+  socket.emit('joinRoom', { roomName, host_name }, (data) => {
     console.log(`Router RTP Capabilities... ${data.rtpCapabilities}`)
     // we assign to local variable and will be used when
     // loading the client Device (see createDevice above)
@@ -20723,13 +20724,20 @@ const signalNewConsumerTransport = async (remoteProducerId) => {
   })
 }
 // ________________________________________________________________________________________________________________________
-
+let host_list2;
 // server informs the client of a new producer just joined
-socket.on('new-producer', ({ producerId }) => signalNewConsumerTransport(producerId))
+socket.on('new-producer', ({ producerId, host_list }) => {
+  // console.log("HOST LIST: ",host_list)
+  host_list2 = host_list
+  
+  signalNewConsumerTransport(producerId)
+})
 // _______________________________________________________________________________________________________________________
 
 const getProducers = () => {
-  socket.emit('getProducers', producerIds => {
+  socket.emit('getProducers', (producerIds, host_list) => {
+    // console.log("HOST LIST: ",host_list)
+    host_list2 = host_list;
     // for each of the producer create a consumer
     // producerIds.forEach(id => signalNewConsumerTransport(id))
     producerIds.forEach(signalNewConsumerTransport)
@@ -20743,6 +20751,7 @@ const connectRecvTransport = async (consumerTransport, remoteProducerId, serverC
   // for consumer, we need to tell the server first
   // to create a consumer based on the rtpCapabilities and consume
   // if the router can consume, it will send back a set of params as below
+  
   await socket.emit('consume', {
     rtpCapabilities: device.rtpCapabilities,
     remoteProducerId,
@@ -20823,10 +20832,11 @@ const connectRecvTransport = async (consumerTransport, remoteProducerId, serverC
     // ------------------Participant Area Added--------------------------------------------------------------------------------------------
     var participant_Column = document.querySelector('.participantsColumn');
     //Add socketID (if socketID already existed, not add)
+    const host_namee = decodeURI(host_list2[params.consumer_socketID])
     if (!socketIDlist.includes(params.consumer_socketID)) {
       socketIDlist.push(params.consumer_socketID);
       var participant_div = `<div id="par-${params.consumer_socketID}">
-                              <p> ${params.consumer_socketID} </p>
+                              <p style="color: green;"> ${host_namee} </p>
                               <div id="cam-${params.consumer_socketID}" >
                                   <h6 style="display: inline-block;"> Cam: </h6>
                                   <div id="cam-video-${params.consumer_socketID}" name="on" class="button2" style="display: inline-block;width: 20px;">
@@ -21515,8 +21525,7 @@ socket.on("sendMsg", (from, msg) => {
   
 
   const message__author = document.createElement('strong');
-  
-  message__author.textContent = `${from}`;
+  message__author.textContent = `${decodeURI(host_list2[from])}`;
 
   const message__text = document.createElement('p');
   

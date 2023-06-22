@@ -7,9 +7,6 @@ app.listen(4000, () => {
     console.log(`API REST running in http://localhost:${4000}`);
 });
 
-// app2.listen(3000, () => {
-//     console.log(`API REST running in http://localhost:${3000}`);
-// });
 httpsServer.listen(3000, () => {
   console.log('listening on port: ' + 3000)
 })

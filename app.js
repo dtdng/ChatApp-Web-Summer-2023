@@ -42,7 +42,7 @@ app.post('/sfu', (req, res) => {
   `);
   
 });
-app.use('/sfu/:room', express.static(path.join(__dirname, 'public')))
+app.use('/sfu/:room/:username', express.static(path.join(__dirname, 'public')))
 // export default app;
 
 // SSL cert for HTTPS access
@@ -78,7 +78,7 @@ let peers = {}          // { socketId1: { roomName1, socket, transports = [id1, 
 let transports = []     // [ { socketId1, roomName1, transport, consumer }, ... ]
 let producers = []      // [ { socketId1, roomName1, producer, }, ... ]
 let consumers = []      // [ { socketId1, roomName1, consumer, }, ... ]
-
+let host_list = {}
 const createWorker = async () => {
   worker = await mediasoup.createWorker({
     rtcMinPort: 40000,
@@ -120,7 +120,7 @@ const mediaCodecs = [
 ]
 
 connections.on('connection', async socket => {
-  console.log(socket.id)
+  console.log(socket.username)
   socket.emit('connection-success', {
     socketId: socket.id,
   })
@@ -164,9 +164,10 @@ connections.on('connection', async socket => {
     }
   })
 
-  socket.on('joinRoom', async ({ roomName }, callback) => {
+  socket.on('joinRoom', async ({ roomName, host_name }, callback) => {
     // create Router if it does not exist
     // const router1 = rooms[roomName] && rooms[roomName].get('data').router || await createRoom(roomName, socket.id)
+    host_list[socket.id] = host_name
     const router1 = await createRoom(roomName, socket.id)
 
     peers[socket.id] = {
@@ -304,7 +305,8 @@ connections.on('connection', async socket => {
     })
 
     // return the producer list back to the client
-    callback(producerList)
+    console.log("HOSTT: ", host_list)
+    callback(producerList, host_list)
   })
 
   const informConsumers = (roomName, socketId, id) => {
@@ -315,7 +317,7 @@ connections.on('connection', async socket => {
       if (producerData.socketId !== socketId && producerData.roomName === roomName) {
         const producerSocket = peers[producerData.socketId].socket
         // use socket to send producer id to producer
-        producerSocket.emit('new-producer', { producerId: id })
+        producerSocket.emit('new-producer', { producerId: id , host_list})
       }
     })
   }
