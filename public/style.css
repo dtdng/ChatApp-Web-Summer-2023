@@ -1,6 +1,10 @@
-
+body{
+    background-color:rgb(2, 2, 2);
+}
 button {
     margin: 2;
+    /* border: solid 1px black;
+    border-radius: 50%; */
 }
 tr {
     vertical-align: top;
@@ -20,28 +24,49 @@ tr {
 .button-clicked_camera_share_screen {
     background-color: red;
     color: white;
+    border-radius: 50%;
+}
+.button-clicked_camera_share_screen2 {
+    background-color: rgb(255, 255, 255);
+    color: white;
+    border-radius: 50%;
 }
 .button-clicked_mic_share_screen {
     background-color: red;
     color: white;
+    border-radius: 50%;
+}
+.button-clicked_mic_share_screen2 {
+    background-color: rgb(255, 255, 255);
+    color: white;
+    border-radius: 50%;
 }
 .button2{
     background-color: red;
     color: white;
+    width: 30px;
+    border: solid 1px black;
+    border-radius: 50%;
 }
+/* .button2 img{
+    width: 30px;
+} */
 .video {
     width: 200px;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(2, 2, 2);
     padding: 0;
     margin: 1px 1px;
     /* border: 3px solid #fff; */
     border-radius: 10px;
+    margin-top:10px;
+    margin-right: 5px
 }
 .video2 {
-    width: 600px;
-    background-color: rgb(255, 255, 255);
+    width: 650px;
+    background-color: rgb(2, 2, 2);
     padding: 0;
     margin: 1px 1px;
+    margin-left: 100px;
     /* border: 3px solid #fff; */
     border-radius: 10px;
 }
@@ -56,15 +81,17 @@ tr {
 }
 
 .videoContainer_state1 {
-    display: flex;
+    display: inline-block;
     flex-wrap: wrap;
     position: absolute;
     left:0px;
     top: 0px;
-    background-color: rgb(26, 25, 25);
+    background-color: rgb(2, 2, 2);
     width: 250px;
     height: 70%;
-    overflow-y: scroll;
+    overflow-y: auto;
+    border-right: 3px solid rgb(255, 141, 99);
+
 }
 .videoContainer_state2 {
     display: flex;
@@ -72,14 +99,19 @@ tr {
     position: absolute;
     left:0px;
     top: 0px;
-    background-color: rgb(225, 30, 30);
+    background-color: rgb(2, 2, 2);
     width: 1100px;
     height: 70%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
-
-#videoContainer #change_size{
-    position: absolute;
+#change_size{
+    display: none;
+    margin-bottom: 30px;
+}
+#change_size img{
+    /* position: absolute; */
+    width:30px;
+    height: 30px;
     top:0px;
 }
 #videoContainer video{
@@ -88,7 +120,7 @@ tr {
 
 .largeScreen{
     position: absolute;
-    background-color: rgb(157, 255, 0);
+    background-color: rgb(2, 2, 2);
     top:0px;
     width: 860px;
     height: 70%;
@@ -113,16 +145,17 @@ tr {
     top: 0px;
     width: 200;
     height:120;
+    border: 1px solid rgb(255, 141, 99);
 }
 .ShareScreen #btnCamShareScreen{
     position: absolute;
     bottom: 10px;
-    left: 0px;
+    left: 30px;
 }
 .ShareScreen #btnMicShareScreen{
     position: absolute;
     bottom: 10px;
-    left: 65px;
+    left: 70px;
 }
 .remoteVideo {
     float: left;
@@ -160,7 +193,8 @@ tr {
 
 
 .control-container{
-  background-color: rgba(148, 148, 148, 0.9);
+    background-color: rgb(207, 207, 207);
+    /* background-color: rgb(2, 2, 2); */
   padding: 20px;
   border-radius: 50%;
   display: flex;
@@ -194,5 +228,130 @@ tr {
     top: 0px;
     height: 100%;
     width: 350px;
-    background-color: rgb(229, 206, 29);
+    background-color: rgb(255, 255, 255);
+    border-left: 3px solid rgb(255, 141, 99);
 }
+#move_to_chat img{
+    height: 30px;
+    width: 30px;
+}
+
+.chatColumn{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    width: 350px;
+    background-color: rgb(47, 47, 47);
+    border-left: 3px solid rgb(255, 141, 99);
+}
+#move_to_participant img{
+    height: 30px;
+    width: 30px;
+}
+
+#message_form {
+    width: 320px;
+    position: absolute;
+    bottom: 0;
+    display: block;
+    background-color: rgb(47, 47, 47);
+    padding: 1em;
+  }
+  
+  #message_form input {
+    color: #000000;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    padding: 18px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #b7d1ff;
+  }
+  
+  #message_form input:focus {
+    outline: none;
+  }
+  
+  #message_form input::placeholder {
+    color: #707575;
+  }
+  #send_msg{
+    position: absolute;
+    top:28;
+    right:20;
+    width: 30px;
+    height: 30px;
+    background-color: #b7d1ff;
+
+  }
+  #send_msg img{
+    width: 30px;
+    height: 30px;
+  }
+  /* ==============CheckisHostorClientMessage================= */
+  #chat_box {
+    overflow-y: auto;
+    height: 400px;
+    
+    background-color: rgb(47, 47, 47);
+  }
+ 
+  .message__body_host {
+    background-color: #f2f4f9;
+    border-radius: 10px;
+    padding: 10px 15px;
+    width: 170px;
+    max-width: 900px;
+    display:inline-block;
+    margin-left: 150px;
+    margin-bottom: 10px;
+  }
+  
+  .message__body_host strong {
+    font-weight: 600;
+    color: #ede0e0;
+    
+  }
+  .message__author_host {
+    margin-right: 10px;
+    color: #2aca3e!important; 
+    word-wrap: break-word;
+    width: 100%;
+  }
+  .message__text_host{
+    margin: 0;
+    color: rgb(0, 0, 0);
+    word-wrap: break-word;
+    width: 100%;
+  }
+
+
+   .message__body_client {
+    background-color: #555659;
+    border-radius: 10px;
+    padding: 10px 15px;
+    width: 170px;
+    max-width: 900px;
+    display:inline-block;
+    margin-bottom: 10px;
+  }
+  
+  .message__body_client strong {
+    font-weight: 600;
+    color: #ede0e0;
+  }
+  .message__author_client {
+    margin-right: 10px;
+    color: #ddd8fa!important; 
+    word-wrap: break-word;
+    width: 100%;
+  }
+  .message__text_client{
+    margin: 0;
+    color: white;
+    word-wrap: break-word;
+    width: 100%;
+  }
+  

@@ -373,17 +373,24 @@ const connectRecvTransport = async (consumerTransport, remoteProducerId, serverC
       socketIDlist.push(params.consumer_socketID);
       var participant_div = `<div id="par-${params.consumer_socketID}">
                               <p> ${params.consumer_socketID} </p>
-                              <div id="cam-${params.consumer_socketID}">
-                                <h6> Cam: 
-                                  <button id="cam-video-${params.consumer_socketID}" name="on" class="button2">Cam</button>
-                                  <button id="cam-audio-${params.consumer_socketID}" name="on" class="button2">Mic</button>
-                                </h6>
+                              <div id="cam-${params.consumer_socketID}" >
+                                  <h6 style="display: inline-block;"> Cam: </h6>
+                                  <div id="cam-video-${params.consumer_socketID}" name="on" class="button2" style="display: inline-block;width: 20px;">
+                                    <img src="./icons/cam.png" style="width: 20px;"/>
+                                  </div>
+                                  <div id="cam-audio-${params.consumer_socketID}" name="on" class="button2" style="display: inline-block;width: 20px;">
+                                    <img src="./icons/micro.png" style="width: 20px;"/>
+                                  </div>
+                                
                               </div>
                               <div id="screen-${params.consumer_socketID}">
-                                <h6> Sreen shared: 
-                                  <button id="screen-video-${params.consumer_socketID}" name="on" class="button2">Cam</button>
-                                  <button id="screen-audio-${params.consumer_socketID}" name="on" class="button2">Mic</button>
-                                </h6>
+                                <h6 style="display: inline-block;"> Sreen shared: </h6>
+                                  <div id="screen-video-${params.consumer_socketID}" name="on" class="button2" style="display: inline-block;width: 20px;">
+                                    <img src="./icons/share.png" style="width: 20px;"/>
+                                  </div>
+                                  <div id="screen-audio-${params.consumer_socketID}" name="on" class="button2" style="display: inline-block;width: 20px;">
+                                    <img src="./icons/loud.png" style="width: 20px;"/>
+                                  </div>
                               </div>
                             </div>`
       participant_Column.insertAdjacentHTML("beforeend", participant_div)
@@ -517,13 +524,19 @@ socket.on('producer-closed', ({ remoteProducerId }) => {
   // remove the video div element
   let displayFrame = document.querySelector('.largeScreen')
   let child = displayFrame.children[0]
-  console.log("alooo: ",child.id, remoteProducerId)
-  if(child.id == remoteProducerId){
-    displayFrame.removeChild(child)
+  // console.log("alooo: ",child.id, remoteProducerId)
+  if(child){
+    if(child.id == remoteProducerId){
+      displayFrame.removeChild(child)
+    }
+    else{
+      find_ele.removeChild(document.getElementById(`${remoteProducerId}`))
+    }
   }
   else{
     find_ele.removeChild(document.getElementById(`${remoteProducerId}`))
   }
+  
   
   
   
@@ -565,18 +578,27 @@ const getShareScreenPausedState = () => {
     newEle.setAttribute('class', "video")
     newEle.setAttribute('autoplay', '')
 
-    const btnCamShareScreen = document.createElement('button')
-    btnCamShareScreen.setAttribute('id', "btnCamShareScreen")
-    btnCamShareScreen.innerHTML = 'Camera'
+    // const btnCamShareScreen = document.createElement('button')
+    // btnCamShareScreen.setAttribute('id', "btnCamShareScreen")
+    // btnCamShareScreen.innerHTML = 'Camera'
+    const btnCamShareScreen2 = `<div id="btnCamShareScreen" class="button-clicked_camera_share_screen2">
+                                  <img src="./icons/share.png" style="width: 30px;"/>
+                                </div>`
+    // participant_Column.insertAdjacentHTML("beforeend", btnCamShareScreen)
+    // const btnMicShareScreen = document.createElement('button')
+    // btnMicShareScreen.setAttribute('id', "btnMicShareScreen")
+    // btnMicShareScreen.innerHTML = 'Mic'
 
-    const btnMicShareScreen = document.createElement('button')
-    btnMicShareScreen.setAttribute('id', "btnMicShareScreen")
-    btnMicShareScreen.innerHTML = 'Mic'
+    const btnMicShareScreen2 = `<div id="btnMicShareScreen" class="button-clicked_mic_share_screen2">
+                                  <img src="./icons/loud.png" style="width: 30px;"/>
+                                </div>`
 
     if (tdElement) {
       tdElement.appendChild(newEle);
-      tdElement.appendChild(btnCamShareScreen);
-      tdElement.appendChild(btnMicShareScreen);
+      // tdElement.appendChild(btnCamShareScreen);
+      tdElement.insertAdjacentHTML("beforeend", btnCamShareScreen2)
+      tdElement.insertAdjacentHTML("beforeend", btnMicShareScreen2)
+      // tdElement.appendChild(btnMicShareScreen);
       // btnCamShareScreen.style.position = 'absolute'
       // btnCamShareScreen.style.top = 0
       // btnMicShareScreen.style.position = 'absolute'
@@ -585,7 +607,8 @@ const getShareScreenPausedState = () => {
     }
     isButtonCreated = true
     // -------------Send the media by exist producer------------------
-
+    const btnCamShareScreen = document.getElementById("btnCamShareScreen")
+    const btnMicShareScreen = document.getElementById("btnMicShareScreen")
     connectSendTransport2()
     btnCamShareScreen.addEventListener('click', getCamShareScreenPausedState)
     btnMicShareScreen.addEventListener('click', getMicShareScreenPausedState)
@@ -613,17 +636,25 @@ const getShareScreenPausedState = () => {
     var shareScreenContainer = document.querySelector('.ShareScreen');
     let displayFrame = document.querySelector('.largeScreen')
     let child = displayFrame.children[0]
-    console.log("alooo: ",child.id)
-    if(child.id == 'localShareScreen'){
-      displayFrame.removeChild(child)
-      shareScreenContainer.removeChild(document.getElementById('btnCamShareScreen'))
-      shareScreenContainer.removeChild(document.getElementById('btnMicShareScreen'))
+    // console.log("alooo: ",child.id)
+    if(child){
+      if(child.id == 'localShareScreen'){
+        displayFrame.removeChild(child)
+        shareScreenContainer.removeChild(document.getElementById('btnCamShareScreen'))
+        shareScreenContainer.removeChild(document.getElementById('btnMicShareScreen'))
+      }
+      else{
+        shareScreenContainer.removeChild(document.getElementById('localShareScreen'))
+        shareScreenContainer.removeChild(document.getElementById('btnCamShareScreen'))
+        shareScreenContainer.removeChild(document.getElementById('btnMicShareScreen'))
+      }
     }
     else{
       shareScreenContainer.removeChild(document.getElementById('localShareScreen'))
       shareScreenContainer.removeChild(document.getElementById('btnCamShareScreen'))
       shareScreenContainer.removeChild(document.getElementById('btnMicShareScreen'))
     }
+    
     
 
     return
@@ -706,14 +737,22 @@ const getCamShareScreenPausedState = () => {
   let btnLocalVideo = document.getElementById('btnCamShareScreen');
   if (isturnOffCameraShareScreen == false) {
     isturnOffCameraShareScreen = true
-    btnLocalVideo.classList.toggle('button-clicked_camera_share_screen');
+    // btnLocalVideo.classList.toggle('button-clicked_camera_share_screen');
+    if (btnLocalVideo.classList.contains("button-clicked_camera_share_screen2")) {
+      btnLocalVideo.classList.remove("button-clicked_camera_share_screen2");
+      btnLocalVideo.classList.add("button-clicked_camera_share_screen");
+    } 
     // btnLocalVideo.style.backgroundColor = 'rgb(255,80,80)'
     changeCamPaused2()
     return
   }
   if (isturnOffCameraShareScreen == true) {
     isturnOffCameraShareScreen = false
-    btnLocalVideo.classList.toggle('button-clicked_camera_share_screen');
+    // btnLocalVideo.classList.toggle('button-clicked_camera_share_screen2');
+    if (btnLocalVideo.classList.contains("button-clicked_camera_share_screen")) {
+      btnLocalVideo.classList.remove("button-clicked_camera_share_screen");
+      btnLocalVideo.classList.add("button-clicked_camera_share_screen2");
+    } 
     // btnLocalVideo.style.backgroundColor = 'rgba(148, 148, 148, 0.9)'
     changeCamPaused2()
     return
@@ -748,7 +787,11 @@ const getMicShareScreenPausedState = () => {
   let btnLocalAudio = document.getElementById('btnMicShareScreen');
   if (isturnOffMicShareScreen == false) {
     isturnOffMicShareScreen = true
-    btnLocalAudio.classList.toggle('button-clicked_mic_share_screen');
+    // btnLocalAudio.classList.toggle('button-clicked_mic_share_screen');
+    if (btnLocalAudio.classList.contains("button-clicked_mic_share_screen2")) {
+      btnLocalAudio.classList.remove("button-clicked_mic_share_screen2");
+      btnLocalAudio.classList.add("button-clicked_mic_share_screen");
+    } 
     console.log("on")
     changeMicPaused2()
     return
@@ -756,7 +799,11 @@ const getMicShareScreenPausedState = () => {
   if (isturnOffMicShareScreen == true) {
     isturnOffMicShareScreen = false
     console.log("off")
-    btnLocalAudio.classList.toggle('button-clicked_mic_share_screen');
+    // btnLocalAudio.classList.toggle('button-clicked_mic_share_screen');
+    if (btnLocalAudio.classList.contains("button-clicked_mic_share_screen")) {
+      btnLocalAudio.classList.remove("button-clicked_mic_share_screen");
+      btnLocalAudio.classList.add("button-clicked_mic_share_screen2");
+    } 
     changeMicPaused2()
     return
   }
@@ -764,7 +811,6 @@ const getMicShareScreenPausedState = () => {
 
 const changeMicPaused2 = async () => {
   if (isturnOffMicShareScreen == true) {
-    console.log("akllllkks")
     if (screenAudioProducer) {
       try {
         await screenAudioProducer.pause();
@@ -909,35 +955,61 @@ const changeShowState = async()=>{
 
   
 }
+
+const participant_div = document.querySelector('.participantsColumn');
+const chat_div = document.querySelector('.chatColumn')
+const changeToChatMode = async()=>{
+  participant_div.style.display = 'none'
+  chat_div.style.display = 'block'
+
+}
+const changeToParticipantMode = async()=>{
+  chat_div.style.display = 'none'
+  participant_div.style.display = 'block'
+  
+}
+const getOutTheRoom = ()=>{
+  console.log(1)
+  window.close();
+  // window.top.close();
+  
+}
 // _________________________________________________________Buttons_________________________________________________________________
+const leave_button = document.getElementById('leave-btn')
 btnLocalVideo.addEventListener('click', getCamPausedState)
 btnLocalAudio.addEventListener('click', getMicPausedState)
 btnLocalScreen.addEventListener('click', getShareScreenPausedState)
+leave_button.addEventListener('click', getOutTheRoom)
 change_size.addEventListener('click', changeShowState)
-
+move_to_chat.addEventListener('click', changeToChatMode)
+move_to_participant.addEventListener('click', changeToParticipantMode)
 // btnCamShareScreen.addEventListener('click',getCamShareScreenPausedState)
 // btnMicShareScreen.addEventListener('click',getMicShareScreenPausedState)
 
 
-let displayFrame = document.querySelector('.largeScreen')
+let largeScreen = document.querySelector('.largeScreen')
 let userIdInDisplayFrame = null;
 
 let expandVideoFrame = (e) => {
-  let child = displayFrame.children[0]
+  let child = largeScreen.children[0]
   if(child){
+    //Neu video tren large screen chinhs la video dc click
     if(child.id == e.currentTarget.id){
       return
     }
-  }
-  
-  if(child){
+    
     const origin_div = document.getElementById(listOfVideoFrame[child.id])
     origin_div.appendChild(child)
-    child.style.height = '120px'
-    child.style.width = '200px'
+    // child.style.height = '120px'
+    // child.style.width = '200px'
+    if (child.classList.contains("video2")) {
+      child.classList.remove("video2");
+      child.classList.add("video");
+    } 
     // child.style.bottom = '0px'
   }
-  const largeScreen = document.querySelector('.largeScreen')
+  // const largeScreen = document.querySelector('.largeScreen')
+  //Hien large screen tranhs truwongf howpj large screen dang bi che boi video
   largeScreen.style.display = 'block'
 
   
@@ -950,8 +1022,8 @@ let expandVideoFrame = (e) => {
   button.style.display = 'block'
 
   // displayFrame.style.display = 'block'
-  displayFrame.appendChild(e.currentTarget)
-  userIdInDisplayFrame = e.currentTarget.id
+  largeScreen.appendChild(e.currentTarget)
+  // userIdInDisplayFrame = e.currentTarget.id
 
   if (e.currentTarget.classList.contains("video")) {
     e.currentTarget.classList.remove("video");
@@ -967,4 +1039,52 @@ let expandVideoFrame = (e) => {
 
 let localVideo =document.getElementById('localVideo')
 localVideo.addEventListener('click', expandVideoFrame)
+
+// ====================================Chat==========================
+const form = document.getElementById("message_form");
+const input = document.getElementById("input");
+const chat_box = document.getElementById("chat_box");
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (input.value) {
+    console.log(input.value)
+    socket.emit("chat", input.value);
+    input.value = "";
+  }
+});
+let checkisHost;
+socket.on("isHost",(isHost)=>{
+  checkisHost = isHost
+})
+socket.on("sendMsg", (from, msg) => {
+  const message__body = document.createElement('div');
+  
+
+  const message__author = document.createElement('strong');
+  
+  message__author.textContent = `${from}`;
+
+  const message__text = document.createElement('p');
+  
+  message__text.textContent = `${msg}`;
+
+  if(checkisHost == 1){
+    message__body.classList.add('message__body_host');
+    message__author.classList.add('message__author_host');
+    message__text.classList.add('message__text_host');
+    checkisHost = 0
+  }else{
+    message__body.classList.add('message__body_client');
+    message__author.classList.add('message__author_client');
+    message__text.classList.add('message__text_client');
+    checkisHost = 0
+  }
+
+  message__body.appendChild(message__author);
+  message__body.appendChild(message__text);
+
+  
+  chat_box.appendChild(message__body);
+  // window.scrollTo(0, document.body.scrollHeight);
+});
 

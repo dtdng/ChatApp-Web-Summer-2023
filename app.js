@@ -43,12 +43,12 @@ app.post('/sfu', (req, res) => {
   
 });
 app.use('/sfu/:room', express.static(path.join(__dirname, 'public')))
-
+// export default app;
 
 // SSL cert for HTTPS access
 const options = {
-  key: fs.readFileSync('./server2/ssl/key.pem', 'utf-8'),
-  cert: fs.readFileSync('./server2/ssl/cert.pem', 'utf-8')
+  key: fs.readFileSync('./server/ssl/key.pem', 'utf-8'),
+  cert: fs.readFileSync('./server/ssl/cert.pem', 'utf-8')
 }
 
 const httpsServer = https.createServer(options, app)
@@ -58,7 +58,7 @@ const httpsServer = https.createServer(options, app)
 httpsServer.listen(PORT, () => {
   console.log('listening on port: ' + PORT)
 })
-
+export default httpsServer;
 const io = new Server(httpsServer)
 
 // socket.io namespace (could represent a room?)
@@ -466,6 +466,14 @@ connections.on('connection', async socket => {
     consumers.forEach(item=>{console.log(item.socketId, item.consumer.producerId)})
     // transports = removeItems(transports, socket.id, 'transport')
   });
+
+  // ====================Chat========================
+  socket.on("chat", (msg) => {
+    console.log("message: ",msg)
+    socket.emit("isHost",1)
+    connections.emit("sendMsg", socket.id, msg);
+  });
+  // ====================================
 })
 
 function getProducer(socketId, dataChannel){
@@ -481,7 +489,7 @@ const createWebRtcTransport = async (router) => {
         listenIps: [
           {
             ip: '0.0.0.0', // replace with relevant IP address
-            announcedIp: '127.0.0.1',//'192.168.1.93',
+            announcedIp: '127.0.0.1',
           }
         ],
         enableUdp: true,

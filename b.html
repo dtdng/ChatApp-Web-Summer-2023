@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Button Example</title>
+</head>
+<body>
+  <button id="myButton">Click me</button>
+
+  <script>
+    const button = document.getElementById('myButton');
+    button.addEventListener('click', () => {
+    console.log('Button clicked');
+    window.location.href = 'http://127.0.0.1:3000';
+    });
+  </script>
+</body>
+</html>
