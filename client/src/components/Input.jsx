@@ -112,7 +112,9 @@ const Input = () => {
 
   return (
     <div className="input">
-      <img src={send} alt="" onClick={handleSend} className="sendContent" />
+      <img src={send} alt="" onClick={handleSend} data-toggle="tooltip"
+          data-placement="top"
+          title="Send" className="sendContent" />
       <input
         type="text"
         placeholder="Type something..."
@@ -130,7 +132,9 @@ const Input = () => {
           accept="image/*"
         />
         <label htmlFor="file">
-          <img src={addImg} alt="" />
+          <img src={addImg} data-toggle="tooltip"
+          data-placement="top"
+          title="Upload Image"  alt="" />
         </label>
       </div>
     </div>

@@ -16,10 +16,13 @@ const Chat = () => {
   const roomId = data.chatId;
 
   const handleSelect = async () => {
-    console.log(roomId);
-    console.log(currentUser.uid);
-    console.log(currentUser.displayName);
-    console.log(data.user.uid);
+    const roomID = data.chatId
+    const host = currentUser.displayName
+    const client_name = data.user.displayName
+    // socket.emit("send_username",host)
+
+    const redirectURL = `http://127.0.0.1:3006/sfu/${roomID}/${host}`;
+    window.open(`${redirectURL}`, '_blank','width=800,height=600');
   };
 
   return (
@@ -36,9 +39,12 @@ const Chat = () => {
                 className="chatIcon"
                 src={Cam}
                 alt=""
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Call Video"
                 onClick={handleSelect}
               />
-              <img className="chatIcon" src={search} alt="" />
+              {/* <img className="chatIcon" src={search} alt="" /> */}
               <img className="chatIcon" src={more} alt="" />
               {/* <img src="" alt="" /> */}
             </div>

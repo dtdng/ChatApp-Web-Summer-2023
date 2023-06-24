@@ -23,6 +23,7 @@ io.on("connection", (socket) => {
   console.log(socket.id);
   let currentUser = {};
   socket.on("setUp", (userID, username) => {
+    console.log("hello")
     if (userID != null || username != null) {
       console.log(userID + " : " + username);
       const existingUserIndex = onlineUsers.findIndex((x) => x.uid === userID);
@@ -42,10 +43,10 @@ io.on("connection", (socket) => {
     }
   });
 
-  // socket.on("sendMessage", ({ receiverUserID, senderID }) => {
-  //   console.log("hi");
-  //   io.emit("messageNoti");
-  // });
+  socket.on("sendMessage", ({ receiverUserID, senderID }) => {
+    console.log("hi");
+    io.emit("messageNoti");
+  });
 
   socket.on("disconnect", (reason) => {
     console.log(reason);
