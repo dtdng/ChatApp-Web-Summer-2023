@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "./config.env" });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3004;
 
 const app = express();
 
@@ -18,7 +18,7 @@ const io = new Server(httpServer, {
 });
 
 const onlineUsers = [];
-
+const socket_list = {}
 io.on("connection", (socket) => {
   console.log(socket.id);
   let currentUser = {};
@@ -35,6 +35,7 @@ io.on("connection", (socket) => {
           username: username,
           uid: userID,
         };
+        socket_list[socket.id] = socket
         onlineUsers.push(currentUser);
         console.log("User added:", onlineUsers[onlineUsers.length - 1]);
       }
@@ -44,9 +45,39 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", ({ receiverUserID, senderID }) => {
-    console.log("hi");
-    io.emit("messageNoti");
+    console.log(1)
+    
   });
+
+  socket.on("calling", ({ receiverUserID, senderID, roomID }) => {
+    const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
+    const sender_name = onlineUsers.find((x)=> x.uid === senderID).username;
+    if(receiverSocket){
+      const receiverID = receiverSocket.socketID
+      const receiverSocket2 = socket_list[receiverID]
+      receiverSocket2.emit("messageNoti",{
+        senderUserID: senderID,
+        senderName: sender_name,
+        roomID: roomID,
+      });
+    }
+  });
+
+  socket.on("accept_call", ({ receiverUserID })=>{
+    console.log("===================================================");
+    console.log("receiverUserID: ",receiverUserID)
+    // console.log("senderID",senderID)
+    console.log("socketID: ",socket.id)
+    console.log("onlineUsers: ",onlineUsers)
+    const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
+    console.log("receiverSocket: ",receiverSocket)
+    if(receiverSocket){
+      const receiverID = receiverSocket.socketID
+      const receiverSocket2 = socket_list[receiverID]
+      receiverSocket2.emit("turn_window_call");
+    }
+    // socket.emit("turn_window_call")
+  })
 
   socket.on("disconnect", (reason) => {
     console.log(reason);
@@ -54,6 +85,12 @@ io.on("connection", (socket) => {
     const disconnectedUser = onlineUsers.find((x) => x.uid == currentUser.uid);
     if (disconnectedUser !== -1) {
       onlineUsers.splice(onlineUsers.indexOf(disconnectedUser), 1);
+      for (let key in socket_list) {
+        if (socket_list[key] === socket) {
+          delete socket_list[key];
+          break;
+        }
+      }
       console.log("Online Users:", onlineUsers);
       io.emit("onlineUsers", onlineUsers);
     }

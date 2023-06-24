@@ -9,9 +9,13 @@ import more from "../img/more_vert.png";
 import Input from "./Input";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
-const Chat = () => {
-  const { data } = useContext(ChatContext);
+import Notification from "./Notification";
+import { socket } from "../socket";
 
+
+const Chat = ({roomID, senderUserID,showNotification, caller}) => {
+  const { data } = useContext(ChatContext);
+  console.log(showNotification)
   const { currentUser } = useContext(AuthContext);
   const roomId = data.chatId;
 
@@ -19,14 +23,24 @@ const Chat = () => {
     const roomID = data.chatId
     const host = currentUser.displayName
     const client_name = data.user.displayName
-    // socket.emit("send_username",host)
+    socket.emit("calling", 
+      {
+        receiverUserID: data.user.uid,
+        senderID: currentUser.uid,
+        roomID: roomID,
+      })
+    
+    socket.on("turn_window_call", ()=>{
+      console.log("turn_window_call")
+      const redirectURL = `http://localhost:3006/sfu/${roomID}/${host}`;
+      window.open(`${redirectURL}`, '_blank','width=800,height=600');
+    })
 
-    const redirectURL = `http://127.0.0.1:3006/sfu/${roomID}/${host}`;
-    window.open(`${redirectURL}`, '_blank','width=800,height=600');
   };
 
   return (
     <div className="chat">
+      {showNotification ? <Notification roomID={roomID} senderUserID={senderUserID} caller = {caller}/> : null}
       <div className="chatInfoBox">
         {data.user.uid && (
           <div class="chatInfo">
@@ -35,6 +49,7 @@ const Chat = () => {
               <span>{data.user?.displayName}</span>
             </div>
             <div className="chatIcons">
+            {!showNotification ?
               <img
                 className="chatIcon"
                 src={Cam}
@@ -43,14 +58,16 @@ const Chat = () => {
                 data-placement="top"
                 title="Call Video"
                 onClick={handleSelect}
-              />
+              />: null}
               {/* <img className="chatIcon" src={search} alt="" /> */}
-              <img className="chatIcon" src={more} alt="" />
+              
+              {!showNotification ? <img className="chatIcon" src={more} alt="" /> : null}
               {/* <img src="" alt="" /> */}
             </div>
           </div>
         )}
       </div>
+      
       <Messages />
       <Input />
     </div>
