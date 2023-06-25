@@ -15,6 +15,7 @@ const Notification = ({roomID, receiverUserID, senderUserID, caller, state}) => 
       // emit("accept_call") de xoa notification o nguoi ben kia
       socket.emit("cancel_call",{
         receiverUserID: senderUserID,
+        state: "accept"
       })
 
       const host = currentUser.displayName
@@ -25,9 +26,9 @@ const Notification = ({roomID, receiverUserID, senderUserID, caller, state}) => 
 
   const declineCalling = ()=>{
     setShowNotification2(false);
-    console.log(senderUserID, receiverUserID , currentUser.uid)
     socket.emit("cancel_call",{
       receiverUserID: senderUserID,
+      state: "decline"
     })
   }
 
@@ -35,9 +36,9 @@ const Notification = ({roomID, receiverUserID, senderUserID, caller, state}) => 
     
     socket.emit("cancel_call",{
       receiverUserID: receiverUserID,
+      state: "cancel"
     })
     setShowNotification2(false);
-    console.log("CANCELLL")
   }
 
   if (!showNotification2) {

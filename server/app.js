@@ -82,20 +82,20 @@ io.on("connection", (socket) => {
     // socket.emit("turn_window_call")
   })
 
-  socket.on("cancel_call",({receiverUserID})=>{
-    console.log("===================================================");
-    console.log("receiverUserID: ",receiverUserID)
-    // console.log("senderID",senderID)
-    console.log("socketID: ",socket.id)
-    console.log("onlineUsers: ",onlineUsers)
+  socket.on("cancel_call",({receiverUserID, state})=>{
+    // console.log("===================================================");
+    // console.log("receiverUserID: ",receiverUserID)
+    // // console.log("senderID",senderID)
+    // console.log("socketID: ",socket.id)
+    // console.log("onlineUsers: ",onlineUsers)
     
     const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
-    console.log("receiverSocket: ",receiverSocket)
+    // console.log("receiverSocket: ",receiverSocket)
     if(receiverSocket){
-      console.log("FIND IT")
       const receiverID = receiverSocket.socketID
       const receiverSocket2 = socket_list[receiverID]
       receiverSocket2.emit("turn_off_notification");
+      receiverSocket2.emit("missed_call",{state: state});
     }
   })
 
