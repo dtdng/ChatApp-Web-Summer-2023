@@ -12,6 +12,8 @@ import Notification from "../components/Notification";
 let caller_name;
 let sender;
 let room_call;
+let statee;
+let receiverUserID2;
 const Home = () => {
   // connect to socket when go to the homepage
   const [showNotification, setShowNotification] = useState(false);
@@ -20,23 +22,30 @@ const Home = () => {
     socket.connect();
   }
 
-  socket.on("messageNoti", ({senderUserID, senderName, roomID}) => {
+  socket.on("messageNoti", ({receiverUserID,senderUserID, senderName, roomID, state}) => {
     sender = senderUserID
     caller_name = senderName
     room_call = roomID
+    statee = state
+    receiverUserID2=receiverUserID
     setShowNotification(true);
     
     setTimeout(() => {
       setShowNotification(false);
     }, 10000); 
   });
+
+  socket.on("turn_off_notification", ()=>{
+    console.log("turn_off_notification")
+    setShowNotification(false);
+  })
   // console.log(showNotification)
   return (
     <div className="home">
       <div className="container">
-        
+
         <Sidebar />
-        <Chat roomID={room_call} senderUserID={sender} showNotification={showNotification} caller={caller_name}/>
+        <Chat roomID={room_call} receiverUserID={receiverUserID2} senderUserID={sender} showNotification={showNotification} caller={caller_name} state={statee}/>
       </div>
     </div>
   );

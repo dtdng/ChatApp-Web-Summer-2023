@@ -56,27 +56,47 @@ io.on("connection", (socket) => {
       const receiverID = receiverSocket.socketID
       const receiverSocket2 = socket_list[receiverID]
       receiverSocket2.emit("messageNoti",{
+        receiverUserID:receiverUserID,
         senderUserID: senderID,
         senderName: sender_name,
         roomID: roomID,
+        state: "accepting"
+      });
+      socket.emit("messageNoti",{
+        receiverUserID:receiverUserID,
+        senderUserID: senderID,
+        senderName: sender_name,
+        roomID: roomID,
+        state: "waiting"
       });
     }
   });
 
   socket.on("accept_call", ({ receiverUserID })=>{
-    console.log("===================================================");
-    console.log("receiverUserID: ",receiverUserID)
-    // console.log("senderID",senderID)
-    console.log("socketID: ",socket.id)
-    console.log("onlineUsers: ",onlineUsers)
     const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
-    console.log("receiverSocket: ",receiverSocket)
     if(receiverSocket){
       const receiverID = receiverSocket.socketID
       const receiverSocket2 = socket_list[receiverID]
       receiverSocket2.emit("turn_window_call");
     }
     // socket.emit("turn_window_call")
+  })
+
+  socket.on("cancel_call",({receiverUserID})=>{
+    console.log("===================================================");
+    console.log("receiverUserID: ",receiverUserID)
+    // console.log("senderID",senderID)
+    console.log("socketID: ",socket.id)
+    console.log("onlineUsers: ",onlineUsers)
+    
+    const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
+    console.log("receiverSocket: ",receiverSocket)
+    if(receiverSocket){
+      console.log("FIND IT")
+      const receiverID = receiverSocket.socketID
+      const receiverSocket2 = socket_list[receiverID]
+      receiverSocket2.emit("turn_off_notification");
+    }
   })
 
   socket.on("disconnect", (reason) => {

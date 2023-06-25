@@ -13,12 +13,12 @@ import Notification from "./Notification";
 import { socket } from "../socket";
 
 
-const Chat = ({roomID, senderUserID,showNotification, caller}) => {
+const Chat = ({roomID, receiverUserID, senderUserID,showNotification, caller, state}) => {
   const { data } = useContext(ChatContext);
   console.log(showNotification)
   const { currentUser } = useContext(AuthContext);
   const roomId = data.chatId;
-
+  
   const handleSelect = async () => {
     const roomID = data.chatId
     const host = currentUser.displayName
@@ -36,11 +36,13 @@ const Chat = ({roomID, senderUserID,showNotification, caller}) => {
       window.open(`${redirectURL}`, '_blank','width=800,height=600');
     })
 
+    
+
   };
 
   return (
     <div className="chat">
-      {showNotification ? <Notification roomID={roomID} senderUserID={senderUserID} caller = {caller}/> : null}
+      {showNotification ? <Notification roomID={roomID} receiverUserID={receiverUserID} senderUserID={senderUserID} caller = {caller} state={state}/> : null}
       <div className="chatInfoBox">
         {data.user.uid && (
           <div class="chatInfo">
