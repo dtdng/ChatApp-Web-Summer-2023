@@ -80,7 +80,7 @@ const Input = () => {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
           id: uuid(),
-          text: sendText,
+          text: "miss call",
           senderId: currentUser.uid,
           date: Timestamp.now(),
         }),

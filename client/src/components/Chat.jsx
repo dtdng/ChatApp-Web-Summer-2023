@@ -35,9 +35,6 @@ const Chat = ({roomID, receiverUserID, senderUserID,showNotification, caller, st
       const redirectURL = `http://localhost:3006/sfu/${roomID}/${host}`;
       window.open(`${redirectURL}`, '_blank','width=800,height=600');
     })
-
-    
-
   };
 
   return (

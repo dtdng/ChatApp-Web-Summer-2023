@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
+import { send } from "process";
 
 dotenv.config({ path: "./config.env" });
 
@@ -18,24 +19,28 @@ const io = new Server(httpServer, {
 });
 
 const onlineUsers = [];
-const socket_list = {}
+const socket_list = {};
 io.on("connection", (socket) => {
   console.log(socket.id);
   let currentUser = {};
   socket.on("setUp", (userID, username) => {
-    console.log("hello")
+    console.log("hello");
     if (userID != null || username != null) {
       console.log(userID + " : " + username);
       const existingUserIndex = onlineUsers.findIndex((x) => x.uid === userID);
       if (existingUserIndex !== -1) {
-        onlineUsers[existingUserIndex] = { userID, username };
+        onlineUsers[existingUserIndex] = {
+          socketID: socket.id,
+          username,
+          uid: userID,
+        };
       } else {
         currentUser = {
           socketID: socket.id,
           username: username,
           uid: userID,
         };
-        socket_list[socket.id] = socket
+        socket_list[socket.id] = socket;
         onlineUsers.push(currentUser);
         console.log("User added:", onlineUsers[onlineUsers.length - 1]);
       }
@@ -45,59 +50,58 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", ({ receiverUserID, senderID }) => {
-    console.log(1)
-    
+    console.log("message_received");
   });
 
   socket.on("calling", ({ receiverUserID, senderID, roomID }) => {
-    const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
-    const sender_name = onlineUsers.find((x)=> x.uid === senderID).username;
-    if(receiverSocket){
-      const receiverID = receiverSocket.socketID
-      const receiverSocket2 = socket_list[receiverID]
-      receiverSocket2.emit("messageNoti",{
-        receiverUserID:receiverUserID,
+    const receiverSocket = onlineUsers.find((x) => x.uid === receiverUserID);
+    const sender_name = onlineUsers.find((x) => x.uid === senderID).username;
+    if (receiverSocket) {
+      const receiverID = receiverSocket.socketID;
+      const receiverSocket2 = socket_list[receiverID];
+      receiverSocket2.emit("messageNoti", {
+        receiverUserID: receiverUserID,
         senderUserID: senderID,
         senderName: sender_name,
         roomID: roomID,
-        state: "accepting"
+        state: "accepting",
       });
-      socket.emit("messageNoti",{
-        receiverUserID:receiverUserID,
+      socket.emit("messageNoti", {
+        receiverUserID: receiverUserID,
         senderUserID: senderID,
         senderName: sender_name,
         roomID: roomID,
-        state: "waiting"
+        state: "waiting",
       });
     }
   });
 
-  socket.on("accept_call", ({ receiverUserID })=>{
-    const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
-    if(receiverSocket){
-      const receiverID = receiverSocket.socketID
-      const receiverSocket2 = socket_list[receiverID]
+  socket.on("accept_call", ({ receiverUserID }) => {
+    const receiverSocket = onlineUsers.find((x) => x.uid === receiverUserID);
+    if (receiverSocket) {
+      const receiverID = receiverSocket.socketID;
+      const receiverSocket2 = socket_list[receiverID];
       receiverSocket2.emit("turn_window_call");
     }
     // socket.emit("turn_window_call")
-  })
+  });
 
-  socket.on("cancel_call",({receiverUserID, state})=>{
+  socket.on("cancel_call", ({ receiverUserID, state }) => {
     // console.log("===================================================");
     // console.log("receiverUserID: ",receiverUserID)
     // // console.log("senderID",senderID)
     // console.log("socketID: ",socket.id)
     // console.log("onlineUsers: ",onlineUsers)
-    
-    const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
+
+    const receiverSocket = onlineUsers.find((x) => x.uid === receiverUserID);
     // console.log("receiverSocket: ",receiverSocket)
-    if(receiverSocket){
-      const receiverID = receiverSocket.socketID
-      const receiverSocket2 = socket_list[receiverID]
+    if (receiverSocket) {
+      const receiverID = receiverSocket.socketID;
+      const receiverSocket2 = socket_list[receiverID];
       receiverSocket2.emit("turn_off_notification");
-      receiverSocket2.emit("missed_call",{state: state});
+      receiverSocket2.emit("missed_call", { state: state });
     }
-  })
+  });
 
   socket.on("disconnect", (reason) => {
     console.log(reason);

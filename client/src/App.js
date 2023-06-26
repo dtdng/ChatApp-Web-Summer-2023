@@ -28,6 +28,14 @@ function App() {
     }
     return children;
   };
+  const ProtectedRoute2 = ({ children }) => {
+    if (currentUser) {
+      return <Navigate to="/" />;
+    } else {
+      // socket.connect();
+    }
+    return children;
+  };
 
   return (
     <BrowserRouter>
@@ -41,8 +49,22 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute2>
+                <Login />
+              </ProtectedRoute2>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <ProtectedRoute2>
+                <Register />
+              </ProtectedRoute2>
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
