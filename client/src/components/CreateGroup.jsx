@@ -60,6 +60,10 @@ const CreateGroupForm = (props) => {
     console.log(selectedUsers);
   };
   const handleSubmit = async (event) => {
+    setSelectedUsers([
+      ...selectedUsers,
+      { uid: currentUser.uid, displayName: currentUser.displayName },
+    ]);
     event.preventDefault();
     const groupName = event.target[0].value;
     console.log(groupName);
@@ -70,6 +74,9 @@ const CreateGroupForm = (props) => {
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
       }
       selectedUsers.forEach(async (u) => {
+        await updateDoc(doc(db, "chats", combinedId), {
+          listUserInGroup: selectedUsers,
+        });
         await updateDoc(doc(db, "userChats", u.uid), {
           [combinedId + ".roomId"]: combinedId,
           [combinedId + ".type"]: "Group",
