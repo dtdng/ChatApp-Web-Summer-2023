@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef,useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import { socket } from "../socket";
@@ -8,11 +8,16 @@ const Message = ({ message, call_again }) => {
   // call_againn = call_again
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
-
+  const [type, setType] = useState(null);
   const ref = useRef();
-
+  
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
+    // console.log("TYPE: ", message?.img.split('/')[0])
+    // setType()
+    if(typeof message.type === 'string'){
+      setType(message.type.split('/')[0]) 
+    }
   }, [message]);
 
   const handleSelect = async () => {
@@ -51,7 +56,19 @@ const Message = ({ message, call_again }) => {
           {call_again==="call_again" ? <button id="call_again" onClick={handleSelect}>Goi lai</button> : null}
         </p>
         
-        {message.img && <img src={message.img} alt="" />}
+        {message.img && type==="image"?<img src={message.img} alt="" />: null}
+
+        {message.img && type==="video"?
+        <iframe width="300" height="200" src={message.img} frameBorder="0" allowFullScreen></iframe>
+        : null}
+        {message.img && type==="audio"?
+        <audio controls src={message.img}></audio>
+        : null}
+        {message.img && type!=="image" && type!=="video" && type!=="audio"?
+        <a href={message.img} download = 'filename' target="_blank">
+        <p>File {message.name}</p>
+        </a>
+        : null}
       </div>
     </div>
   );

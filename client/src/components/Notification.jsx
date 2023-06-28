@@ -4,7 +4,7 @@ import { socket } from "../socket";
 import { AuthContext } from "../context/AuthContext";
 
 const Notification = ({roomID, receiverUserID, senderUserID, caller, state}) => {
-  console.log("Notification")
+  // console.log("Notification")
   const { currentUser } = useContext(AuthContext);
   const [showNotification2, setShowNotification2] = useState(true);
   
@@ -21,6 +21,7 @@ const Notification = ({roomID, receiverUserID, senderUserID, caller, state}) => 
         state: "accept", 
         roomID: roomID,
       })
+      
       const host = currentUser.displayName
       const redirectURL = `http://localhost:3006/sfu/${roomID}/${host}/`;
       window.open(`${redirectURL}`, '_blank','width=800,height=600');
@@ -37,11 +38,8 @@ const Notification = ({roomID, receiverUserID, senderUserID, caller, state}) => 
           }
         }
       });
-
-
-
       setShowNotification2(false);
-    
+
   }
 
   const declineCalling = ()=>{

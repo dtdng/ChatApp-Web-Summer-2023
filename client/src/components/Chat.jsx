@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import "../pages/style.css";
 import Cam from "../img/video_call.png";
 import online from "../img/available.png";
@@ -14,14 +14,22 @@ import { socket } from "../socket";
 
 
 const Chat = ({roomID, receiverUserID, senderUserID,showNotification, caller, state}) => {
-  console.log("CHAT")
-  console.log("roomID",roomID)
+  // console.log("CHAT")
+  const [buttonCreated, setButtonCreated] = useState(false);
   const { data } = useContext(ChatContext);
+  
+  // console.log("showNotification",showNotification)
   // console.log(showNotification)
   const { currentUser } = useContext(AuthContext);
   // const [printMsgEndedCall, setprintMsgEndedCall] = useState(false);
-  const handleSelect =  () => {
-    const roomID = data.chatId
+  // useEffect(() => {
+    // console.log("======================================")
+  const handleSelect = () => { 
+      // ==============================================================================
+      // console.log("roomID",data.chatId)
+      // console.log("roomID2",roomID)
+    
+    let roomID = data.chatId
     let host = currentUser.displayName
     let client_name = data.user.displayName
     // useEffect(() => {
@@ -29,12 +37,12 @@ const Chat = ({roomID, receiverUserID, senderUserID,showNotification, caller, st
       {
         receiverUserID: data.user.uid,
         senderID: currentUser.uid,
-        roomID: roomID,
+        roomID: data.chatId,
       })
     
-
+    // if(data.chatId===roomID){
     socket.on("turn_window_call", ()=>{
-      console.log("turn_window_call",roomID)
+      // console.log("turn_window_call",roomID)
       const redirectURL = `http://localhost:3006/sfu/${roomID}/${host}/`;
       window.open(`${redirectURL}`, '_blank','width=800,height=600');
       
@@ -55,8 +63,16 @@ const Chat = ({roomID, receiverUserID, senderUserID,showNotification, caller, st
       
 
     })
-  
+  // }
+    // ============================================================================
   }
+    
+  
+
+   
+  
+    // setButtonCreated(true)
+  
 
 
 
@@ -71,8 +87,9 @@ const Chat = ({roomID, receiverUserID, senderUserID,showNotification, caller, st
               <span>{data.user?.displayName}</span>
             </div>
             <div className="chatIcons">
-            {!showNotification ?
+            {/* {!showNotification ? */}
               <img
+                id="myButton"
                 className="chatIcon"
                 src={Cam}
                 alt=""
@@ -80,10 +97,10 @@ const Chat = ({roomID, receiverUserID, senderUserID,showNotification, caller, st
                 data-placement="top"
                 title="Call Video"
                 onClick={handleSelect}
-              />: null}
+              />
               {/* <img className="chatIcon" src={search} alt="" /> */}
               
-              {!showNotification ? <img className="chatIcon" src={more} alt="" /> : null}
+              <img className="chatIcon" src={more} alt="" /> 
               {/* <img src="" alt="" /> */}
             </div>
           </div>

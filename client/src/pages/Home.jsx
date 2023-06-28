@@ -15,7 +15,7 @@ let room_call;
 let statee;
 let receiverUserID2;
 const Home = () => {
-  console.log("HOME")
+  // console.log("HOME")
   // connect to socket when go to the homepage
   const [showNotification, setShowNotification] = useState(false);
   const { currentUser } = useContext(AuthContext);
@@ -37,7 +37,7 @@ const Home = () => {
   });
 
   socket.on("turn_off_notification", ()=>{
-    console.log("turn_off_notification")
+    // console.log("turn_off_notification")
     setShowNotification(false);
   })
   // console.log(showNotification)

@@ -17,7 +17,8 @@ import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const Messages = () => {
-  console.log("Messages")
+  // console.log("Messages")
+
   const [messages, setMessages] = useState([]);
   const { data } = useContext(ChatContext);
   const { currentUser } = useContext(AuthContext);
@@ -57,6 +58,7 @@ const Messages = () => {
     });
     
     socket.on("missed_call",({state, roomID}) =>{
+      // console.log("missed_call")
       if(state === "decline" || state === "cancel"){
         if(roomID===data.chatId){
               printMessage("You missed a call")
@@ -64,7 +66,7 @@ const Messages = () => {
       }
     });
     socket.on("printMsgEnded",({roomID})=>{
-      console.log("printMsgEnded")
+      // console.log("printMsgEnded")
       // console.log("roomID: ",roomID)
       // console.log("data.chatID: ",data.chatId)
       if(roomID===data.chatId){
