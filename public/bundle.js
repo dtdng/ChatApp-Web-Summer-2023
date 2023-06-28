@@ -20538,7 +20538,7 @@ const joinRoom = () => {
     // we assign to local variable and will be used when
     // loading the client Device (see createDevice above)
     rtpCapabilities = data.rtpCapabilities
-
+    
     // once we have rtpCapabilities from the Router, create Device
     createDevice()
   })
@@ -20578,6 +20578,10 @@ const createDevice = async () => {
       console.warn('browser not supported')
   }
 }
+
+
+
+
 
 const createSendTransport = () => {
   // see server's socket.on('createWebRtcTransport', sender?, ...)
@@ -20966,11 +20970,20 @@ const connectRecvTransport = async (consumerTransport, remoteProducerId, serverC
 }
 
 // ___________________________________________________________________________________________________________________________________________________________
-
+socket.on('window_close', ({ remain_user })=>{
+      
+  console.log("window_close: ",remain_user)
+  if(remain_user<=1){
+    window.opener.postMessage('tabClosed', 'http://localhost:3000');
+    window.close()
+  }
+  // window.close()
+})
 socket.on('producer-closed', ({ remoteProducerId }) => {
   // server notification is received when a producer is closed
   // we need to close the client-side consumer and associated transport
-  console.log("procedudd",remoteProducerId)
+  // console.log("procedudd",remoteProducerId)
+  
   const producerToClose = consumerTransports.find(transportData => transportData.producerId === remoteProducerId)
   if(producerToClose==null){
     return
@@ -21015,6 +21028,8 @@ socket.on('producer-closed', ({ remoteProducerId }) => {
     button_deleted.classList.toggle('button2');
     check = 2
   }
+
+  console.log("consumerTransports===",consumerTransports)
 
 })
 
@@ -21434,8 +21449,8 @@ const changeToParticipantMode = async()=>{
 }
 const getOutTheRoom = ()=>{
   console.log(1)
+  // socket.emit("window_close")
   window.close();
-  // window.top.close();
   
 }
 // _________________________________________________________Buttons_________________________________________________________________
