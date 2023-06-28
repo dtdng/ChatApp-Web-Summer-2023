@@ -75,6 +75,7 @@ const Register = () => {
                 displayName,
                 photoURL: downloadURL,
               });
+
               //create user on firestore
               await setDoc(doc(db, "users", res.user.uid), {
                 uid: res.user.uid,
@@ -82,7 +83,6 @@ const Register = () => {
                 email,
                 photoURL: downloadURL,
               });
-
               //create empty user chats on firestore
               await setDoc(doc(db, "userChats", res.user.uid), {});
               navigate("/");
@@ -131,6 +131,7 @@ const Register = () => {
               style={{ display: "none" }}
               onChange={handleChange}
               id="file"
+              accept="image/*"
             />
             <label htmlFor="file">
               {avatar && <img src={avatar.preview} alt="" />}

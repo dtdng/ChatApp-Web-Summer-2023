@@ -38,11 +38,11 @@ const Input = () => {
   const handleSend = async () => {
     let sendText = text.trim();
     setText("");
-    // let sendText = text;
+    console.log(data.chatId);
     if (!img && sendText == "") {
       return;
     }
-    if (data.user.uid == null) {
+    if (data.chatId == null) {
       return;
     }
     if (img) {
@@ -80,31 +80,33 @@ const Input = () => {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
           id: uuid(),
-          text: "miss call",
+          text: sendText,
           senderId: currentUser.uid,
+          senderUsername: currentUser.displayName,
+          senderAvatar: currentUser.photoURL,
           date: Timestamp.now(),
         }),
       });
     }
 
-    await updateDoc(doc(db, "userChats", currentUser.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
+    // await updateDoc(doc(db, "userChats", currentUser.uid), {
+    //   [data.chatId + ".lastMessage"]: {
+    //     text,
+    //   },
+    //   [data.chatId + ".date"]: serverTimestamp(),
+    // });
 
-    await updateDoc(doc(db, "userChats", data.user.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
+    // await updateDoc(doc(db, "userChats", data.user.uid), {
+    //   [data.chatId + ".lastMessage"]: {
+    //     text,
+    //   },
+    //   [data.chatId + ".date"]: serverTimestamp(),
+    // });
 
-    socket.emit("sendMessage", {
-      receiverUserID: data.user.uid,
-      senderID: currentUser.uid,
-    });
+    // socket.emit("sendMessage", {
+    //   receiverUserID: data.user.uid,
+    //   senderID: currentUser.uid,
+    // });
 
     setText("");
     setImg(null);
@@ -112,9 +114,15 @@ const Input = () => {
 
   return (
     <div className="input">
-      <img src={send} alt="" onClick={handleSend} data-toggle="tooltip"
-          data-placement="top"
-          title="Send" className="sendContent" />
+      <img
+        src={send}
+        alt=""
+        onClick={handleSend}
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Send"
+        className="sendContent"
+      />
       <input
         type="text"
         placeholder="Type something..."
@@ -132,9 +140,13 @@ const Input = () => {
           accept="image/*"
         />
         <label htmlFor="file">
-          <img src={addImg} data-toggle="tooltip"
-          data-placement="top"
-          title="Upload Image"  alt="" />
+          <img
+            src={addImg}
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Upload Image"
+            alt=""
+          />
         </label>
       </div>
     </div>

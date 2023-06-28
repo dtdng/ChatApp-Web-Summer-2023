@@ -18,6 +18,10 @@ const Message = ({ message }) => {
       className={`message ${message.senderId === currentUser.uid && "owner"}`}
     >
       <div className="messageInfo">
+        {data.type == "Group" && <span>{message.senderUsername}</span>}
+        {data.type == "Group" && (
+          <img src={message.senderAvatar} alt="" srcset="" />
+        )}
       </div>
       <div className="messageContent">
         <p

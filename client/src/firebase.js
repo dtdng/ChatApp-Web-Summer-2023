@@ -5,13 +5,13 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAZor8ettIPU-rAgyjl5OwSwi3mWPy-kzE",
-  authDomain: "fir-learning-25dbc.firebaseapp.com",
-  projectId: "fir-learning-25dbc",
-  storageBucket: "fir-learning-25dbc.appspot.com",
-  messagingSenderId: "624789124397",
-  appId: "1:624789124397:web:e4d1f30f175ef050430fa4",
-  measurementId: "G-B8Q6JED3ZW",
+  apiKey: "AIzaSyC2E2KY9Q3F4x9AuQv2uuaaGzlSHiCTa84",
+  authDomain: "testing-ff165.firebaseapp.com",
+  projectId: "testing-ff165",
+  storageBucket: "testing-ff165.appspot.com",
+  messagingSenderId: "982667609763",
+  appId: "1:982667609763:web:3f95233835a6ae093fa116",
+  measurementId: "G-6HZEJ0F30N",
 };
 
 // Initialize Firebase
