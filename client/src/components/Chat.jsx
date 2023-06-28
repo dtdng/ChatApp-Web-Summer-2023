@@ -1,4 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect, } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
 import "../pages/style.css";
 import Cam from "../img/video_call.png";
 import online from "../img/available.png";
@@ -24,11 +26,24 @@ const Chat = ({
   console.log(showNotification);
   const { currentUser } = useContext(AuthContext);
   // const roomId = data.roomID;
+  const [listOfUsers, setlistOfUsers] = useState([]);
+  
+  useEffect(() => {
+    const unSub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
+      doc.exists() && setlistOfUsers(doc.data().listUserInGroup);
+      console.log("listOfUsers: ",listOfUsers);
+    });
+    return () => {
+      unSub();
+    };
+  }, [data.chatId]);
+
 
   const handleSelect = async () => {
     const roomID = data.chatId;
     const host = currentUser.displayName;
     const client_name = data.user.displayName;
+    console.log("aaa: ",listOfUsers);
     socket.emit("calling", {
       receiverUserID: data.user.uid,
       senderID: currentUser.uid,
