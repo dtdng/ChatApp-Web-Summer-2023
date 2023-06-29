@@ -14,11 +14,12 @@ const Chats = () => {
   // const { data } = useContext(ChatContext);
   const [chats, setChats] = useState([]);
   const [onlineUser, setOnlineUser] = useState([]);
+  const [onlineUsersList, setOnlineUsersList] = useState([]);
 
   socket.on("onlineUsers", (onlineUsers) => {
     // console.log(onlineUsers);
     setOnlineUser(onlineUsers);
-    // const onlineUsers = onlineUser.map((user) => user.uid);
+    console.log(onlineUsers);
   });
 
   useEffect(() => {
@@ -32,13 +33,20 @@ const Chats = () => {
         unsub();
       };
     };
-
     currentUser.uid && getChats();
   }, [currentUser.uid]);
-
+  useEffect(() => {
+    const getChats = () => {
+      setOnlineUsersList(onlineUser.map((user) => user.uid));
+      return () => {
+        unsub();
+      };
+    };
+    currentUser.uid && getChats();
+  }, [onlineUser]);
   // console.log(onlineUser);
   // console.log(chats);
-  const onlineUserUIDs = onlineUser.map((user) => user.uid);
+  // const onlineUserUIDs = onlineUser.map((user) => user.uid);
   // console.log(onlineUserUIDs);
   // console.log(onlineUsers);
   // const onlineChats = chats.filter((chat) =>
@@ -67,14 +75,14 @@ const Chats = () => {
               )}
 
               {chat[1].type == "DirectMessage" &&
-                onlineUser.findIndex(
-                  (o) => o.userID === chat[1].userInfo.uid
+                onlineUsersList.findIndex(
+                  (o) => o === chat[1].userInfo.uid
                 ) === -1 && (
                   <img className="statusIcon" src={offline} alt="offline" />
                 )}
               {chat[1].type == "DirectMessage" &&
-                onlineUser.findIndex(
-                  (o) => o.userID === chat[1].userInfo.uid
+                onlineUsersList.findIndex(
+                  (o) => o === chat[1].userInfo.uid
                 ) !== -1 && (
                   <img className="statusIcon" src={online} alt="online" />
                 )}
@@ -103,7 +111,11 @@ const Chats = () => {
                 {chat[1].lastMessage?.text && (
                   <p>{chat[1].lastMessage?.text}</p>
                 )}
-                {!chat[1].lastMessage?.text && <p>  </p>}
+                {chat[1].lastMessage?.text === "" ? (
+                  <p>Sent a file </p>
+                ) : (
+                  <p></p>
+                )}
               </div>
             </div>
           ))}
