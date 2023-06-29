@@ -44,7 +44,7 @@ const Chat = ({
       
     });
     setRoom(data.chatId)
-    console.log("room: ",data.chatId);
+    // console.log("room: ",data.chatId);
     return () => {
       unSub();
     };

@@ -103,7 +103,7 @@ const Chats = () => {
                 {chat[1].lastMessage?.text && (
                   <p>{chat[1].lastMessage?.text}</p>
                 )}
-                {!chat[1].lastMessage?.text && <p>Sent a file </p>}
+                {!chat[1].lastMessage?.text && <p>  </p>}
               </div>
             </div>
           ))}
