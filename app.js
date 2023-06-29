@@ -41,7 +41,7 @@ app.post('/sfu', (req, res) => {
     </script>
   `);
   
-});
+});  
 app.use('/sfu/:room/:username', express.static(path.join(__dirname, 'public')))
 // export default app;
 
@@ -155,6 +155,7 @@ connections.on('connection', async socket => {
     transports = removeItems(transports, socket.id, 'transport')
 
     const { roomName } = peers[socket.id]
+    
     delete peers[socket.id]
 
     // remove socket from room
@@ -162,6 +163,23 @@ connections.on('connection', async socket => {
       router: rooms[roomName].router,
       peers: rooms[roomName].peers.filter(socketId => socketId !== socket.id)
     }
+    // connections.emit('window_close', { remain_user: rooms[roomName].peers.length})
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    console.log(peers)
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    console.log(producers)
+    producers.forEach(producerData => {
+      if (producerData.roomName === roomName) {
+        const producerSocket = peers[producerData.socketId].socket
+        // use socket to send producer id to producer
+        console.log(rooms[roomName].peers.length)
+        // console.log(producerSocket)
+        // console.log(producerSocket.id)
+        
+        producerSocket.emit('window_close', { remain_user: rooms[roomName].peers.length})
+      }
+    })
+
   })
 
   socket.on('joinRoom', async ({ roomName, host_name }, callback) => {
@@ -403,13 +421,13 @@ connections.on('connection', async socket => {
           console.log('transport close from consumer')
         })
         consumer.on('producerclose', () => {
-          console.log(2)
           console.log('producer of consumer closed')
           socket.emit('producer-closed', { remoteProducerId })
           consumerTransport.close([])
           transports = transports.filter(transportData => transportData.transport.id !== consumerTransport.id)
           consumer.close()
           consumers = consumers.filter(consumerData => consumerData.consumer.id !== consumer.id)
+          
         })
 
         addConsumer(consumer, roomName)
@@ -465,6 +483,7 @@ connections.on('connection', async socket => {
     
     // consumers = removeItems(consumers, socket.id, 'consumer')
     producers = removeProducerShareScreen(producers, socket.id, 'producer')
+    
     consumers.forEach(item=>{console.log(item.socketId, item.consumer.producerId)})
     // transports = removeItems(transports, socket.id, 'transport')
   });
@@ -476,6 +495,9 @@ connections.on('connection', async socket => {
     connections.emit("sendMsg", socket.id, msg);
   });
   // ====================================
+  // socket.on("window_close", ()=>{
+  //   console.log("cllooosse")
+  // })
 })
 
 function getProducer(socketId, dataChannel){

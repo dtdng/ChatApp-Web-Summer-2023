@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import {
   collection,
@@ -23,6 +23,7 @@ const CreateGroupForm = (props) => {
   const [user, setUser] = useState(null);
   const [userYou, setUserYou] = useState(null);
   const [err, setErr] = useState(false);
+  const [confirm, setConfirm] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const { currentUser } = useContext(AuthContext);
 
@@ -59,20 +60,28 @@ const CreateGroupForm = (props) => {
       setSelectedUsers([...selectedUsers, addUser]);
     console.log(selectedUsers);
   };
-  const handleSubmit = async (event) => {
+
+  useEffect(() => {
     setSelectedUsers([
       ...selectedUsers,
       { uid: currentUser.uid, displayName: currentUser.displayName },
     ]);
+  }, [confirm]);
+
+  const handleSubmit = async (event) => {
+    setConfirm(!confirm)
+    console.log("selectedUsers",selectedUsers)
     event.preventDefault();
     const groupName = event.target[0].value;
     console.log(groupName);
+    
     const combinedId = currentUser.uid + Timestamp.now().seconds;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
       if (!res.exists()) {
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
       }
+      
       selectedUsers.forEach(async (u) => {
         await updateDoc(doc(db, "chats", combinedId), {
           listUserInGroup: selectedUsers,
@@ -142,6 +151,7 @@ const CreateGroupForm = (props) => {
           >
             cancel
           </button>
+          
           <button className="btn btn-success">Create</button>
         </div>
       </form>

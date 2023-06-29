@@ -14,6 +14,7 @@ let sender;
 let room_call;
 let statee;
 let receiverUserID2;
+let call_type;
 const Home = () => {
   // connect to socket when go to the homepage
   const [showNotification, setShowNotification] = useState(false);
@@ -22,12 +23,13 @@ const Home = () => {
     socket.connect();
   }
 
-  socket.on("messageNoti", ({receiverUserID,senderUserID, senderName, roomID, state}) => {
+  socket.on("messageNoti", ({receiverUserID,senderUserID, senderName, roomID, state, type}) => {
     sender = senderUserID
     caller_name = senderName
     room_call = roomID
     statee = state
     receiverUserID2=receiverUserID
+    call_type = type
     setShowNotification(true);
     
     setTimeout(() => {
@@ -45,7 +47,7 @@ const Home = () => {
       <div className="container">
 
         <Sidebar />
-        <Chat roomID={room_call} receiverUserID={receiverUserID2} senderUserID={sender} showNotification={showNotification} caller={caller_name} state={statee}/>
+        <Chat roomID={room_call} receiverUserID={receiverUserID2} senderUserID={sender} showNotification={showNotification} caller={caller_name} state={statee} type={call_type}/>
       </div>
     </div>
   );

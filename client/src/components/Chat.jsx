@@ -14,6 +14,14 @@ import { ChatContext } from "../context/ChatContext";
 import Notification from "./Notification";
 import { socket } from "../socket";
 import groupChat from "../img/group-chat.png";
+import { v4 as uuid } from "uuid";
+import {
+  arrayUnion,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
+import {storage } from "../firebase";
 const Chat = ({
   roomID,
   receiverUserID,
@@ -21,41 +29,93 @@ const Chat = ({
   showNotification,
   caller,
   state,
+  type,
 }) => {
   const { data } = useContext(ChatContext);
   console.log(showNotification);
   const { currentUser } = useContext(AuthContext);
   // const roomId = data.roomID;
+  const [room, setRoom] = useState(null);
   const [listOfUsers, setlistOfUsers] = useState([]);
   
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
       doc.exists() && setlistOfUsers(doc.data().listUserInGroup);
-      console.log("listOfUsers: ",listOfUsers);
+      
     });
+    setRoom(data.chatId)
+    console.log("room: ",data.chatId);
     return () => {
       unSub();
     };
   }, [data.chatId]);
 
 
-  const handleSelect = async () => {
-    const roomID = data.chatId;
-    const host = currentUser.displayName;
-    const client_name = data.user.displayName;
-    console.log("aaa: ",listOfUsers);
-    socket.emit("calling", {
-      receiverUserID: data.user.uid,
-      senderID: currentUser.uid,
-      roomID: roomID,
-    });
+    const handleSelect = () => { 
+      let roomID = data.chatId
+      let host = currentUser.displayName
+      let client_name = data.user.displayName
+      
+      // console.log("listOfUsers: ",listOfUsers.map(user => user.uid));
+      if(data.type === "DirectMessage"){
+        socket.emit("calling", 
+        {
+          receiverUserID: data.user.uid,
+          senderID: currentUser.uid,
+          roomID: room,
+        })
+      
+      }
+      if(data.type === "Group"){
+        console.log("Groupp")
+        console.log(listOfUsers.map(user => user.uid))
+        socket.emit("calling_group", 
+        {
+          receiverUserID: listOfUsers.map(user => user.uid),
+          senderID: currentUser.uid,
+          roomID: room,
+        })
 
-    socket.on("turn_window_call", () => {
-      console.log("turn_window_call");
-      const redirectURL = `http://localhost:3006/sfu/${roomID}/${host}`;
-      window.open(`${redirectURL}`, "_blank", "width=800,height=600");
-    });
-  };
+        updateDoc(doc(db, "chats", data.chatId), {
+          messages: arrayUnion({
+            id: uuid(),
+            text: "Group Video Call is on",
+            senderId: currentUser.uid,
+            date: Timestamp.now(),
+            call_again: "join",
+          }),
+        });
+    
+        const text=""
+        updateDoc(doc(db, "userChats", currentUser.uid), {
+        [data.chatId + ".lastMessage"]: {
+          text,
+        },
+        [data.chatId + ".date"]: serverTimestamp(),
+        });
+      }
+      socket.on("turn_window_call", ()=>{
+        console.log("data.chatID", room)
+        const redirectURL = `http://localhost:3006/sfu/${room}/${host}/`;
+        window.open(`${redirectURL}`, '_blank','width=800,height=600');
+        
+        const handleMsgEvent = (event) => {
+          if (event.origin === 'http://localhost:3006') {
+            if (event.data === 'tabClosed') {
+              // Tab is closed
+              console.log(4)
+              socket.emit("sendEndedCallMsg",{
+                receiverUserID: currentUser.uid,
+                roomID: roomID,
+              })
+            }
+          }
+        }
+        window.addEventListener('message', handleMsgEvent);
+        })
+
+    // ============================================================================
+    }
 
   return (
     <div className="chat">
@@ -66,6 +126,7 @@ const Chat = ({
           senderUserID={senderUserID}
           caller={caller}
           state={state}
+          type={type}
         />
       ) : null}
       <div className="chatInfoBox">
