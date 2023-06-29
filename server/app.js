@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
       }
 
     }
-    socket.emit("turn_window_call");
+    socket.emit("turn_window_call",{room_ID: roomID});
     
     
   });
@@ -106,12 +106,13 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("accept_call", ({ receiverUserID }) => {
+  socket.on("accept_call", ({ receiverUserID, roomID }) => {
     const receiverSocket = onlineUsers.find((x) => x.uid === receiverUserID);
     if (receiverSocket) {
       const receiverID = receiverSocket.socketID;
       const receiverSocket2 = socket_list[receiverID];
-      receiverSocket2.emit("turn_window_call");
+      console.log(1111111)
+      receiverSocket2.emit("turn_window_call",{room_ID: roomID});
     }
     // socket.emit("turn_window_call")
   });

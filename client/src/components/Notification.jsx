@@ -11,6 +11,7 @@ const Notification = ({roomID, receiverUserID, senderUserID, caller, state, type
     if(type=="DirectMessage"){
       socket.emit("accept_call",{
           receiverUserID: senderUserID,
+          roomID: roomID,
           // senderID: currentUser.uid,
       })
       // emit("accept_call") de xoa notification o nguoi ben kia

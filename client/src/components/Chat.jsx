@@ -94,9 +94,9 @@ const Chat = ({
         [data.chatId + ".date"]: serverTimestamp(),
         });
       }
-      socket.on("turn_window_call", ()=>{
-        console.log("data.chatID", room)
-        const redirectURL = `http://localhost:3006/sfu/${room}/${host}/`;
+      socket.on("turn_window_call", ({room_ID})=>{
+        console.log("data.chatID", room_ID)
+        const redirectURL = `http://localhost:3006/sfu/${room_ID}/${host}/`;
         window.open(`${redirectURL}`, '_blank','width=800,height=600');
         
         const handleMsgEvent = (event) => {
@@ -106,7 +106,7 @@ const Chat = ({
               console.log(4)
               socket.emit("sendEndedCallMsg",{
                 receiverUserID: currentUser.uid,
-                roomID: roomID,
+                roomID: room_ID,
               })
             }
           }
