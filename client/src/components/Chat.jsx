@@ -74,6 +74,7 @@ const Chat = ({
           receiverUserID: listOfUsers.map(user => user.uid),
           senderID: currentUser.uid,
           roomID: room,
+          group_name: "Group " + data.user
         })
 
         updateDoc(doc(db, "chats", data.chatId), {

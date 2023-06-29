@@ -53,7 +53,7 @@ io.on("connection", (socket) => {
     console.log("message_received");
   });
 
-  socket.on("calling_group", ({ receiverUserID, senderID, roomID }) => {
+  socket.on("calling_group", ({ receiverUserID, senderID, roomID, group_name }) => {
     console.log("CALL GROUP")
     const resultArray = [];
     const sender_name = onlineUsers.find((x) => x.uid === senderID).username;
@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
           receiverSocket2.emit("messageNoti", {
             receiverUserID: uid,
             senderUserID: senderID,
-            senderName: sender_name,
+            senderName: group_name,
             roomID: roomID,
             state: "accepting",
             type: "Group"

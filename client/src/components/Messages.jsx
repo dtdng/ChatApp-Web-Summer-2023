@@ -22,9 +22,10 @@ const Messages = () => {
   const { data } = useContext(ChatContext);
   const { currentUser } = useContext(AuthContext);
 
-  const printMessage=(sendText)=>{
+  const printMessage=(sendText, roomID)=>{
+    console.log("updateee")
     const text = ""
-    updateDoc(doc(db, "chats", data.chatId), {
+    updateDoc(doc(db, "chats", roomID), {
       messages: arrayUnion({
         id: uuid(),
         text: sendText,
@@ -66,9 +67,9 @@ const Messages = () => {
     });
 
     socket.on("printMsgEnded",({roomID})=>{
-      if(roomID===data.chatId){
-        printMessage("The call ended")
-      }
+      // if(roomID===data.chatId){
+        printMessage("The call ended", roomID)
+      // }
     })
 
     return () => {
