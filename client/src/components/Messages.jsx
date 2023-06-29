@@ -30,6 +30,8 @@ const Messages = () => {
         id: uuid(),
         text: sendText,
         senderId: currentUser.uid,
+        senderUsername: currentUser.displayName,
+        senderAvatar: currentUser.photoURL,
         date: Timestamp.now(),
         call_again: "call_again",
       }),
@@ -61,7 +63,7 @@ const Messages = () => {
       // console.log("missed_call")
       if(state === "decline" || state === "cancel"){
         if(roomID===data.chatId){
-              printMessage("You missed a call")
+              printMessage("You missed a call", roomID)
         }        
       }
     });

@@ -112,6 +112,8 @@ const Input = () => {
                 id: uuid(),
                 text: sendText,
                 senderId: currentUser.uid,
+                senderUsername: currentUser.displayName,
+                senderAvatar: currentUser.photoURL,
                 date: Timestamp.now(),
                 img: downloadURL,
                 name: img.type==="audio/wav"?"your_voic.wav":img.name,

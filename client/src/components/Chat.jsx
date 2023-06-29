@@ -54,9 +54,7 @@ const Chat = ({
     const handleSelect = () => { 
       let roomID = data.chatId
       let host = currentUser.displayName
-      let client_name = data.user.displayName
       
-      // console.log("listOfUsers: ",listOfUsers.map(user => user.uid));
       if(data.type === "DirectMessage"){
         socket.emit("calling", 
         {
@@ -67,8 +65,6 @@ const Chat = ({
       
       }
       if(data.type === "Group"){
-        console.log("Groupp")
-        console.log(listOfUsers.map(user => user.uid))
         socket.emit("calling_group", 
         {
           receiverUserID: listOfUsers.map(user => user.uid),
@@ -82,6 +78,8 @@ const Chat = ({
             id: uuid(),
             text: "Group Video Call is on",
             senderId: currentUser.uid,
+            senderUsername: currentUser.displayName,
+            senderAvatar: currentUser.photoURL,
             date: Timestamp.now(),
             call_again: "join",
           }),
