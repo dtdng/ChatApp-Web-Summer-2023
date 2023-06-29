@@ -69,19 +69,19 @@ const CreateGroupForm = (props) => {
   }, [confirm]);
 
   const handleSubmit = async (event) => {
-    setConfirm(!confirm)
-    console.log("selectedUsers",selectedUsers)
+    setConfirm(!confirm);
+    console.log("selectedUsers", selectedUsers);
     event.preventDefault();
     const groupName = event.target[0].value;
     console.log(groupName);
-    
+
     const combinedId = currentUser.uid + Timestamp.now().seconds;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
       if (!res.exists()) {
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
       }
-      
+
       selectedUsers.forEach(async (u) => {
         await updateDoc(doc(db, "chats", combinedId), {
           listUserInGroup: selectedUsers,
@@ -99,6 +99,7 @@ const CreateGroupForm = (props) => {
         [combinedId + ".name"]: groupName,
         [combinedId + ".date"]: serverTimestamp(),
       });
+      props.setTrigger(false);
     } catch (err) {}
   };
   return props.trigger ? (
@@ -151,7 +152,7 @@ const CreateGroupForm = (props) => {
           >
             cancel
           </button>
-          
+
           <button className="btn btn-success">Create</button>
         </div>
       </form>

@@ -120,7 +120,7 @@ const Search = () => {
           </div>
         </div>
       )}
-      {userYou && (
+      {/* {userYou && (
         <div
           className="searchUserChat"
           // onClick={alert("cannot send message to yourself")}
@@ -130,7 +130,7 @@ const Search = () => {
             <span>{userYou.displayName} (you)</span>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

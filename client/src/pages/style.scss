@@ -131,9 +131,10 @@
           font-size: 12px;
           cursor: pointer;
 
-          img {
-            width: 32px;
-            height: 32px;
+          .previewAvatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
           }
         }
       }
@@ -512,6 +513,10 @@
               border-radius: 10px;
               margin-bottom: 20px;
             }
+
+            audio {
+              margin-bottom: 15px;
+            }
           }
 
           &.owner {
@@ -566,11 +571,11 @@
             cursor: pointer;
             border-radius: 0;
           }
-          .record_btn{
+          .record_btn {
             background-color: white;
             border-radius: 50%;
           }
-          .record_btn2{
+          .record_btn2 {
             background-color: red;
             border-radius: 50%;
           }

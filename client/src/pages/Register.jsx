@@ -64,9 +64,9 @@ const Register = () => {
         const res = await createUserWithEmailAndPassword(auth, email, password);
 
         //Create a unique image name
-        const date = new Date().getTime();
-        const storageRef = ref(storage, `${displayName + date}`);
-
+        // const date = new Date().getTime();
+        const storageRef = ref(storage, `${displayName + "avatar"}`);
+        
         await uploadBytesResumable(storageRef, file).then(() => {
           getDownloadURL(storageRef).then(async (downloadURL) => {
             try {
@@ -134,7 +134,9 @@ const Register = () => {
               accept="image/*"
             />
             <label htmlFor="file">
-              {avatar && <img src={avatar.preview} alt="" />}
+              {avatar && (
+                <img src={avatar.preview} alt="" className="previewAvatar" />
+              )}
               <span>Upload your avatar here</span>
             </label>
             <button className="button">

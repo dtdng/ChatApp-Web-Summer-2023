@@ -184,7 +184,6 @@ const Input = () => {
           style={{ display: "none" }}
           id="file"
           onChange={handleFileChange}
-          accept="image/*"
         />
 
         <div class={isClick?"record_btn":"record_btn2"}>
