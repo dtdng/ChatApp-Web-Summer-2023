@@ -150,10 +150,10 @@ const Input = () => {
     //   [data.chatId + ".date"]: serverTimestamp(),
     // });
 
-    // socket.emit("sendMessage", {
-    //   receiverUserID: data.user.uid,
-    //   senderID: currentUser.uid,
-    // });
+    socket.emit("sendMessage", {
+      receiverUserID: data.user.uid,
+      senderID: currentUser.uid,
+    });
 
     setText("");
     setImg(null);

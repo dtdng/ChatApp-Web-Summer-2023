@@ -88,6 +88,7 @@ const Message = ({ message, call_again }) => {
 
         {message.img && type === "video" ? (
           <iframe
+            className="video"
             width="300"
             height="200"
             src={message.img}

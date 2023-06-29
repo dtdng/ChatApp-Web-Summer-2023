@@ -11,6 +11,7 @@ import continue_img from "../img/continue.png";
 import { socket } from "../socket";
 
 const Login = () => {
+  const [errMessage, setErrMessage] = useState(null);
   const [err, setErr] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       setErr(true);
+      setErrMessage(error.message);
     }
   };
   return (
@@ -57,7 +59,7 @@ const Login = () => {
               <img src={google} alt="" srcset="" />
             </div>
           </form>
-          {err && <span>Your email or password is incorrect</span>}
+          {err && <span>{errMessage}</span>}
         </div>
       </div>
     </div>

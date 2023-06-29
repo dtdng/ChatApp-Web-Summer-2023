@@ -14,7 +14,7 @@ const Chats = () => {
   // const { data } = useContext(ChatContext);
   const [chats, setChats] = useState([]);
   const [onlineUser, setOnlineUser] = useState([]);
-  
+
   socket.on("onlineUsers", (onlineUsers) => {
     // console.log(onlineUsers);
     setOnlineUser(onlineUsers);
