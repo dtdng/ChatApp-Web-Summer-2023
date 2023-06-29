@@ -3,7 +3,6 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
 
-
 dotenv.config({ path: "./config.env" });
 
 const PORT = process.env.PORT || 3004;
@@ -50,36 +49,38 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", ({ receiverUserID, senderID }) => {
-    console.log("message_received");
+    console.log("message_received", receiverUserID);
+    const receiverSocket = onlineUsers.find((x) => x.uid == receiverUserID);
+    console.log("receiverSocket: ", receiverSocket);
   });
 
-  socket.on("calling_group", ({ receiverUserID, senderID, roomID, group_name }) => {
-    console.log("CALL GROUP")
-    const resultArray = [];
-    const sender_name = onlineUsers.find((x) => x.uid === senderID).username;
-    for (const uid of receiverUserID) {
-      if(uid!==senderID){
-        const receiverSocket = onlineUsers.find((x) => x.uid === uid);
-        console.log("receiverSocket: ",receiverSocket)
-        if (receiverSocket) {
-          const receiverID = receiverSocket.socketID;
-          const receiverSocket2 = socket_list[receiverID];
-          receiverSocket2.emit("messageNoti", {
-            receiverUserID: uid,
-            senderUserID: senderID,
-            senderName: group_name,
-            roomID: roomID,
-            state: "accepting",
-            type: "Group"
-          });
+  socket.on(
+    "calling_group",
+    ({ receiverUserID, senderID, roomID, group_name }) => {
+      console.log("CALL GROUP");
+      const resultArray = [];
+      const sender_name = onlineUsers.find((x) => x.uid === senderID).username;
+      for (const uid of receiverUserID) {
+        if (uid !== senderID) {
+          const receiverSocket = onlineUsers.find((x) => x.uid === uid);
+          console.log("receiverSocket: ", receiverSocket);
+          if (receiverSocket) {
+            const receiverID = receiverSocket.socketID;
+            const receiverSocket2 = socket_list[receiverID];
+            receiverSocket2.emit("messageNoti", {
+              receiverUserID: uid,
+              senderUserID: senderID,
+              senderName: group_name,
+              roomID: roomID,
+              state: "accepting",
+              type: "Group",
+            });
+          }
         }
       }
-
+      socket.emit("turn_window_call", { room_ID: roomID });
     }
-    socket.emit("turn_window_call",{room_ID: roomID});
-    
-    
-  });
+  );
 
   socket.on("calling", ({ receiverUserID, senderID, roomID }) => {
     const receiverSocket = onlineUsers.find((x) => x.uid === receiverUserID);
@@ -111,8 +112,8 @@ io.on("connection", (socket) => {
     if (receiverSocket) {
       const receiverID = receiverSocket.socketID;
       const receiverSocket2 = socket_list[receiverID];
-      console.log(1111111)
-      receiverSocket2.emit("turn_window_call",{room_ID: roomID});
+      console.log(1111111);
+      receiverSocket2.emit("turn_window_call", { room_ID: roomID });
     }
     // socket.emit("turn_window_call")
   });
@@ -126,32 +127,29 @@ io.on("connection", (socket) => {
 
     const receiverSocket = onlineUsers.find((x) => x.uid === receiverUserID);
     // console.log("receiverSocket: ",receiverSocket)
-    if(receiverSocket){
-      const receiverID = receiverSocket.socketID
-      const receiverSocket2 = socket_list[receiverID]
-      if(state==="cancel"){
-        socket.emit("missed_call",{state: state, roomID: roomID});
+    if (receiverSocket) {
+      const receiverID = receiverSocket.socketID;
+      const receiverSocket2 = socket_list[receiverID];
+      if (state === "cancel") {
+        socket.emit("missed_call", { state: state, roomID: roomID });
       }
-      if(state==="decline")
-      {
-        receiverSocket2.emit("missed_call",{state: state, roomID: roomID});
+      if (state === "decline") {
+        receiverSocket2.emit("missed_call", { state: state, roomID: roomID });
       }
       receiverSocket2.emit("turn_off_notification");
-      
     }
   });
 
-  socket.on("sendEndedCallMsg",({receiverUserID, roomID})=>{
-    console.log("sendEndedCallMsg")
-    const receiverSocket = onlineUsers.find((x)=> x.uid === receiverUserID);
-    if(receiverSocket){
-      const receiverID = receiverSocket.socketID
-      const receiverSocket2 = socket_list[receiverID]
-      console.log("sendEndedCallMsg2")
-      receiverSocket2.emit("printMsgEnded",{roomID: roomID})
+  socket.on("sendEndedCallMsg", ({ receiverUserID, roomID }) => {
+    console.log("sendEndedCallMsg");
+    const receiverSocket = onlineUsers.find((x) => x.uid === receiverUserID);
+    if (receiverSocket) {
+      const receiverID = receiverSocket.socketID;
+      const receiverSocket2 = socket_list[receiverID];
+      console.log("sendEndedCallMsg2");
+      receiverSocket2.emit("printMsgEnded", { roomID: roomID });
     }
-  })
-
+  });
 
   socket.on("disconnect", (reason) => {
     console.log(reason);

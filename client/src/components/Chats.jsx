@@ -75,15 +75,13 @@ const Chats = () => {
               )}
 
               {chat[1].type == "DirectMessage" &&
-                onlineUsersList.findIndex(
-                  (o) => o === chat[1].userInfo.uid
-                ) === -1 && (
+                onlineUsersList.findIndex((o) => o === chat[1].userInfo.uid) ===
+                  -1 && (
                   <img className="statusIcon" src={offline} alt="offline" />
                 )}
               {chat[1].type == "DirectMessage" &&
-                onlineUsersList.findIndex(
-                  (o) => o === chat[1].userInfo.uid
-                ) !== -1 && (
+                onlineUsersList.findIndex((o) => o === chat[1].userInfo.uid) !==
+                  -1 && (
                   <img className="statusIcon" src={online} alt="online" />
                 )}
               {chat[1].type === "Group" && (
@@ -94,12 +92,6 @@ const Chats = () => {
                   style={{ opacity: 0 }}
                 />
               )}
-
-              {/* {onlineUser.findIndex(
-                (o) => o.userID === chat[1].userInfo.uid
-              ) !== -1 && (
-                <img className="statusIcon" src={online} alt="online" />
-              )} */}
               <div className="userChatInfo">
                 {chat[1].type === "DirectMessage" ? (
                   <span>{chat[1].userInfo.displayName}</span>

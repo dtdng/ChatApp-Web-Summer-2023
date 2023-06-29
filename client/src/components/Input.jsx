@@ -17,7 +17,12 @@ import {
 } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
-import { getDownloadURL, list, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  getDownloadURL,
+  list,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { socket } from "../socket";
 
 const Input = () => {
@@ -162,6 +167,10 @@ const Input = () => {
         },
         [data.chatId + ".date"]: serverTimestamp(),
       });
+      socket.emit("sendMessage", {
+        receiverUserID: data.user.uid,
+        senderID: currentUser.uid,
+      });
     } else if (data.type == "Group") {
       listOfUsers.forEach(async (u) => {
         await updateDoc(doc(db, "userChats", u.uid), {
@@ -170,12 +179,8 @@ const Input = () => {
           },
           [data.chatId + ".date"]: serverTimestamp(),
         });
-      })
+      });
     }
-    socket.emit("sendMessage", {
-      receiverUserID: data.user.uid,
-      senderID: currentUser.uid,
-    });
 
     setText("");
     setImg(null);
