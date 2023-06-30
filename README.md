@@ -7,7 +7,6 @@ ChatApp project for WebCourse Summer 2023. Using Firebase, ReactJS, and SocketIO
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ## Features
@@ -41,20 +40,32 @@ In the root directory, you can run:
    
 then run:
    `cd ../server && npm install` for installing the server package
+   
 then run :
   `cd .. && npm install mediasoup && npm install` for installing the videocall package
+
+  > **Note**
+> only the linux kernel can run the mediasoup lib, or else the call video feature will be disable
+
 ## Usage
 
-Provide examples or instructions on how to use your project. Include code snippets or screenshots if necessary.
+In the root directory, you can run:
+
+### `npm start`
+
+then you can create an account and use 
+
+ > **Note**
+> If u want to use this program on your Firebase console, just change firebaseConfig in .client/firebase.js 
 
 ## Contributing
 
-Explain how others can contribute to your project, whether through bug reports, feature suggestions, or pull requests.
-
-## License
-
-Specify the license under which your project is released. For example, you can use the MIT License, Apache License, or any other open-source license.
+- Cao Dang Dat 
+- Nguyen Ngoc Dang
+- Nguyen Thanh Dat 
 
 ## Contact
 
-Provide contact information for yourself or your team, so others can reach out to you for questions or collaboration opportunities.
+If you have any questions, feel free to reach out:
+
+Dang Dat - [dangdatcao2002@gmail.com](mailto:dangdatcao2002@gmail.com)
