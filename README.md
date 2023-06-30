@@ -12,7 +12,7 @@ ChatApp project for WebCourse Summer 2023. Using Firebase, ReactJS, and SocketIO
 
 ## Features
 
-### Messaging:
+Messaging:
 - Sign in/sign out: using email and password.
 - Find another user.
 - Chat in real-time with other users.
@@ -20,7 +20,7 @@ ChatApp project for WebCourse Summer 2023. Using Firebase, ReactJS, and SocketIO
 - Send the image, video, file
 
 
-### Video call: 
+Video call: 
 - Call video and sound to each other
 - Share the screen
 - Real-time chat in a room
@@ -36,8 +36,13 @@ ChatApp project for WebCourse Summer 2023. Using Firebase, ReactJS, and SocketIO
 - SocketIO for the server handling event.
 
 ## Installation
-
-
+In the root directory, you can run:
+   `cd client && npm install` for installing the client package
+   
+then run:
+   `cd ../server && npm install` for installing the server package
+then run :
+  `cd .. && npm install mediasoup && npm install` for installing the videocall package
 ## Usage
 
 Provide examples or instructions on how to use your project. Include code snippets or screenshots if necessary.
