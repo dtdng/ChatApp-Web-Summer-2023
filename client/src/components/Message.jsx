@@ -50,6 +50,10 @@ const Message = ({ message, call_again }) => {
     });
   };
 
+  socket.on("new_message", (senderID) => {
+    console.log(senderID);
+  });
+
   return (
     <div
       ref={ref}

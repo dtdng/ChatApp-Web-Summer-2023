@@ -77,12 +77,26 @@ const Chats = () => {
               {chat[1].type == "DirectMessage" &&
                 onlineUsersList.findIndex((o) => o === chat[1].userInfo.uid) ===
                   -1 && (
-                  <img className="statusIcon" src={offline} alt="offline" />
+                  <img
+                    className="statusIcon"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="user is offline"
+                    src={offline}
+                    alt="offline"
+                  />
                 )}
               {chat[1].type == "DirectMessage" &&
                 onlineUsersList.findIndex((o) => o === chat[1].userInfo.uid) !==
                   -1 && (
-                  <img className="statusIcon" src={online} alt="online" />
+                  <img
+                    className="statusIcon"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="user is online"
+                    src={online}
+                    alt="online"
+                  />
                 )}
               {chat[1].type === "Group" && (
                 <img

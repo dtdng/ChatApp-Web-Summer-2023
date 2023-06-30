@@ -51,7 +51,10 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", ({ receiverUserID, senderID }) => {
     console.log("message_received", receiverUserID);
     const receiverSocket = onlineUsers.find((x) => x.uid == receiverUserID);
-    console.log("receiverSocket: ", receiverSocket);
+    const receiverID = receiverSocket.socketID;
+    const receiverSocket2 = socket_list[receiverID];
+    receiverSocket2.emit("new_message", senderID);
+    // console.log("receiverSocket: ", receiverSocket);
   });
 
   socket.on(

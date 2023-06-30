@@ -30,6 +30,9 @@ const GroupChat = () => {
         alt=""
         srcset=""
         onClick={handleClick}
+        data-toggle="tooltip"
+        data-placement="top"
+        title="create group"
       />
       <CreateGroupForm
         trigger={buttonPopup}
