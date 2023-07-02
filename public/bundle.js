@@ -20539,7 +20539,6 @@ const joinRoom = () => {
     // we assign to local variable and will be used when
     // loading the client Device (see createDevice above)
     rtpCapabilities = data.rtpCapabilities
-    
     // once we have rtpCapabilities from the Router, create Device
     createDevice()
   })
@@ -20579,10 +20578,6 @@ const createDevice = async () => {
       console.warn('browser not supported')
   }
 }
-
-
-
-
 
 const createSendTransport = () => {
   // see server's socket.on('createWebRtcTransport', sender?, ...)
@@ -20984,7 +20979,7 @@ socket.on('producer-closed', ({ remoteProducerId }) => {
   // server notification is received when a producer is closed
   // we need to close the client-side consumer and associated transport
   // console.log("procedudd",remoteProducerId)
-  
+
   const producerToClose = consumerTransports.find(transportData => transportData.producerId === remoteProducerId)
   if(producerToClose==null){
     return
@@ -20999,6 +20994,7 @@ socket.on('producer-closed', ({ remoteProducerId }) => {
   // console.log("consumerTransports before: ",consumerTransports.length)
   consumerTransports = consumerTransports.filter(transportData => transportData.producerId !== remoteProducerId)
   // console.log("consumerTransports after: ",consumerTransports.length)
+
   const find_ele = document.getElementById(`td-${consumer_socketid}`)
   // remove the video div element
   let displayFrame = document.querySelector('.largeScreen')
@@ -21455,6 +21451,7 @@ const getOutTheRoom = ()=>{
     window.opener.postMessage('tabClosed', 'http://localhost:3000');
   }
   window.close();
+
   
 }
 // _________________________________________________________Buttons_________________________________________________________________

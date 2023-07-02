@@ -73,6 +73,7 @@ const Chat = ({
           group_name: "Group " + data.user
         })
 
+
         updateDoc(doc(db, "chats", data.chatId), {
           messages: arrayUnion({
             id: uuid(),
