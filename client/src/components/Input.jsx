@@ -170,6 +170,7 @@ const Input = () => {
       socket.emit("sendMessage", {
         receiverUserID: data.user.uid,
         senderID: currentUser.uid,
+        roomID: data.chatId
       });
     } else if (data.type == "Group") {
       listOfUsers.forEach(async (u) => {

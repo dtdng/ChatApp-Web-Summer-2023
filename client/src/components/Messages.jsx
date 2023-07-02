@@ -14,7 +14,8 @@ import {
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-
+import { toast } from "react-toastify";
+import { ToastContainer } from 'react-toastify';
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const { data } = useContext(ChatContext);
@@ -75,11 +76,16 @@ const Messages = () => {
         }
       }
     });
-
+    socket.on("new_message", ({senderID,roomID}) => {
+      console.log(1111);
+      if (roomID === data.chatId) {
+      toast("you have new message");
+      }
+    });
     socket.on("printMsgEnded", ({ roomID }) => {
-      // if(roomID===data.chatId){
-      printMessage("The call ended", roomID);
-      // }
+      if (roomID === data.chatId) {
+        printMessage("The call ended", roomID);
+      }
     });
 
     return () => {
@@ -89,6 +95,7 @@ const Messages = () => {
 
   return (
     <div className="messages">
+      <ToastContainer />
       {messages.map((m) => (
         <Message
           message={m}

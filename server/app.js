@@ -48,12 +48,14 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("sendMessage", ({ receiverUserID, senderID }) => {
+  socket.on("sendMessage", ({ receiverUserID, senderID, roomID }) => {
     console.log("message_received", receiverUserID);
     const receiverSocket = onlineUsers.find((x) => x.uid == receiverUserID);
+    if (receiverSocket) {
     const receiverID = receiverSocket.socketID;
     const receiverSocket2 = socket_list[receiverID];
-    receiverSocket2.emit("new_message", senderID);
+    receiverSocket2.emit("new_message", {senderID, roomID});
+    }
     // console.log("receiverSocket: ", receiverSocket);
   });
 
