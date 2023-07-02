@@ -64,9 +64,9 @@ const Register = () => {
         const res = await createUserWithEmailAndPassword(auth, email, password);
 
         //Create a unique image name
-        const date = new Date().getTime();
-        const storageRef = ref(storage, `${displayName + date}`);
-
+        // const date = new Date().getTime();
+        const storageRef = ref(storage, `${displayName + "avatar"}`);
+        
         await uploadBytesResumable(storageRef, file).then(() => {
           getDownloadURL(storageRef).then(async (downloadURL) => {
             try {
@@ -75,6 +75,7 @@ const Register = () => {
                 displayName,
                 photoURL: downloadURL,
               });
+
               //create user on firestore
               await setDoc(doc(db, "users", res.user.uid), {
                 uid: res.user.uid,
@@ -82,7 +83,6 @@ const Register = () => {
                 email,
                 photoURL: downloadURL,
               });
-
               //create empty user chats on firestore
               await setDoc(doc(db, "userChats", res.user.uid), {});
               navigate("/");
@@ -131,9 +131,12 @@ const Register = () => {
               style={{ display: "none" }}
               onChange={handleChange}
               id="file"
+              accept="image/*"
             />
             <label htmlFor="file">
-              {avatar && <img src={avatar.preview} alt="" />}
+              {avatar && (
+                <img src={avatar.preview} alt="" className="previewAvatar" />
+              )}
               <span>Upload your avatar here</span>
             </label>
             <button className="button">

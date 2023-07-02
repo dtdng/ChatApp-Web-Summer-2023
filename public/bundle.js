@@ -20475,6 +20475,7 @@ let device
 let rtpCapabilities
 let producerTransport
 let consumerTransports = []
+
 let audioProducer
 let videoProducer
 let screenVideoProducer
@@ -20538,7 +20539,6 @@ const joinRoom = () => {
     // we assign to local variable and will be used when
     // loading the client Device (see createDevice above)
     rtpCapabilities = data.rtpCapabilities
-
     // once we have rtpCapabilities from the Router, create Device
     createDevice()
   })
@@ -20966,11 +20966,20 @@ const connectRecvTransport = async (consumerTransport, remoteProducerId, serverC
 }
 
 // ___________________________________________________________________________________________________________________________________________________________
-
+socket.on('window_close', ({ remain_user })=>{
+      
+  console.log("window_close: ",remain_user)
+  if(remain_user<=1){
+    window.opener.postMessage('tabClosed', 'http://localhost:3000');
+    window.close()
+  }
+  // window.close()
+})
 socket.on('producer-closed', ({ remoteProducerId }) => {
   // server notification is received when a producer is closed
   // we need to close the client-side consumer and associated transport
-  console.log("procedudd",remoteProducerId)
+  // console.log("procedudd",remoteProducerId)
+
   const producerToClose = consumerTransports.find(transportData => transportData.producerId === remoteProducerId)
   if(producerToClose==null){
     return
@@ -20982,7 +20991,9 @@ socket.on('producer-closed', ({ remoteProducerId }) => {
   producerToClose.consumer.close()
 
   // remove the consumer transport from the list
+  // console.log("consumerTransports before: ",consumerTransports.length)
   consumerTransports = consumerTransports.filter(transportData => transportData.producerId !== remoteProducerId)
+  // console.log("consumerTransports after: ",consumerTransports.length)
 
   const find_ele = document.getElementById(`td-${consumer_socketid}`)
   // remove the video div element
@@ -21015,6 +21026,8 @@ socket.on('producer-closed', ({ remoteProducerId }) => {
     button_deleted.classList.toggle('button2');
     check = 2
   }
+
+  console.log("consumerTransports===",consumerTransports)
 
 })
 
@@ -21434,8 +21447,11 @@ const changeToParticipantMode = async()=>{
 }
 const getOutTheRoom = ()=>{
   console.log(1)
+  if(consumerTransports.length ==0){
+    window.opener.postMessage('tabClosed', 'http://localhost:3000');
+  }
   window.close();
-  // window.top.close();
+
   
 }
 // _________________________________________________________Buttons_________________________________________________________________

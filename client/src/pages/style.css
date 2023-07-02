@@ -236,6 +236,34 @@ input {
   color: white;
   border-radius: 10px 0px 10px 10px;
 }
+.notification{
+  position: absolute;
+  top: 40px;
+  right: 500px;
+  background-color: rgb(89, 211, 251);
+  width: 200px;
+  height: 100px;
+}
+.notification #accept{
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+}
+.notification #decline{
+  position: absolute;
+  bottom: 0;
+  left: 100px;
+}
+.notification #cancel{
+  position: absolute;
+  bottom: 0;
+  left: 80px;
+}
+.notification p{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
 #webpack-dev-server-client-overlay{
   display: none;
 }

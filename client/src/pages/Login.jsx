@@ -159,6 +159,7 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       setErr(true);
+      setErrMessage(error.message);
     }
   };
   return (
@@ -195,7 +196,7 @@ const Login = () => {
               </button>
             </div>
           </form>
-          {err && <span>Your email or password is incorrect</span>}
+          {err && <span>{errMessage}</span>}
         </div>
       </div>
     </div>

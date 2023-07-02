@@ -13,8 +13,7 @@ import {
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 import search from "../img/search.png";
-
-
+import GroupChat from "./GroupChat";
 
 const Search = () => {
   // const { currentUser } = useContext(AuthContext);
@@ -70,6 +69,8 @@ const Search = () => {
             displayName: user.displayName,
             photoURL: user.photoURL,
           },
+          [combinedId + ".roomId"]: combinedId,
+          [combinedId + ".type"]: "DirectMessage",
           [combinedId + ".date"]: serverTimestamp(),
         });
 
@@ -79,6 +80,8 @@ const Search = () => {
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
           },
+          [combinedId + ".roomId"]: combinedId,
+          [combinedId + ".type"]: "DirectMessage",
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
@@ -90,38 +93,46 @@ const Search = () => {
   return (
     <div className="search">
       <div className="searchForm">
-        <img src={search} alt="" />
-        <input
-          type="text"
-          placeholder="Find a user"
-          onKeyDown={handleKey}
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-        />
+        <div className="searchInput">
+          <img
+            src={search}
+            alt=""
+            onClick={handleSearch}
+            className="searchIcon"
+          />
+          <input
+            type="text"
+            placeholder="Find a user"
+            onKeyDown={handleKey}
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+        </div>
+        <GroupChat />
       </div>
+
       {err && <span>User not found!</span>}
       {user && (
-        <div className="userChat" onClick={handleSelect}>
+        <div className="searchUserChat" onClick={handleSelect}>
           <img src={user.photoURL} alt="" />
-          <div className="userChatInfo">
+          <div className="searchUserChatInfo">
             <span>{user.displayName}</span>
           </div>
         </div>
       )}
-      {userYou && (
+      {/* {userYou && (
         <div
-          className="userChat"
+          className="searchUserChat"
           // onClick={alert("cannot send message to yourself")}
         >
           <img src={userYou.photoURL} alt="" />
-          <div className="userChatInfo">
+          <div className="searchUserChatInfo">
             <span>{userYou.displayName} (you)</span>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
 
 export default Search;
-

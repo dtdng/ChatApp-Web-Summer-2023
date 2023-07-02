@@ -11,16 +11,21 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const chatReducer = (state, action) => {
-    switch (action.type) {
-      case "CHANGE_USER":
+    switch (action.payload.type) {
+      case "DirectMessage":
         return {
-          user: action.payload,
-          chatId:
-            currentUser.uid > action.payload.uid
-              ? currentUser.uid + action.payload.uid
-              : action.payload.uid + currentUser.uid,
+          user: action.payload.userInfo,
+          type: "DirectMessage",
+          chatId: action.payload.roomId,
         };
 
+      case "Group":
+        return {
+          // user: action.payload.userInfo,
+          user:  action.payload.name,
+          type: "Group",
+          chatId: action.payload.roomId,
+        };
       default:
         return state;
     }
